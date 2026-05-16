@@ -22,7 +22,7 @@ type Thread = {
   views_count?: number
   created_at?: string
   is_pinned?: boolean
-  profiles: Profile | null
+  profiles: any
 }
 
 const CAT_COLOR: Record<string, string> = {
@@ -75,8 +75,8 @@ export default async function Community() {
       .select('category'),
   ])
 
-  const pinnedThreads = (pinnedRaw ?? []) as Thread[]
-  const regularThreads = (regularRaw ?? []) as Thread[]
+  const pinnedThreads = (pinnedRaw ?? []) as unknown as Thread[];
+  const regularThreads = (regularRaw ?? []) as unknown as Thread[];
 
   const countByCategory = (categoryCounts ?? []).reduce<Record<string, number>>(
     (acc, row) => { acc[row.category] = (acc[row.category] ?? 0) + 1; return acc },

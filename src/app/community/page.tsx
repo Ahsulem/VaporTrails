@@ -2,11 +2,87 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 import BigCTA from '@/components/BigCTA'
 import CommunityClient from './CommunityClient'
+import { createClient } from '@/lib/supabase/server'
 import './community.css'
 
 export const metadata = { title: 'Vaportrails — Community · The Network' }
 
-export default function Community() {
+type Profile = {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+type Thread = {
+  id: string
+  title: string
+  excerpt?: string
+  category: string
+  replies_count: number
+  views_count?: number
+  created_at?: string
+  is_pinned?: boolean
+  profiles: Profile | null
+}
+
+const CAT_COLOR: Record<string, string> = {
+  'Trail Routes': 'cyan',
+  'Garage Builds': 'amber',
+  'World Lore': 'crimson',
+  'Events': 'green',
+  'Feedback': '',
+  'Off-Grid': '',
+  'Community': 'cyan',
+}
+
+function relativeTime(iso: string | null | undefined): string {
+  if (!iso) return '—'
+  const diff = Date.now() - new Date(iso).getTime()
+  if (Number.isNaN(diff)) return '—'
+  const m = Math.floor(diff / 60000)
+  if (m < 60) return `${m}m ago`
+  const h = Math.floor(m / 60)
+  if (h < 24) return `${h}h ago`
+  return `${Math.floor(h / 24)}d ago`
+}
+
+function fmtViews(n: number | null | undefined): string {
+  const v = n ?? 0
+  return v >= 1000 ? `${(v / 1000).toFixed(1)}k` : String(v)
+}
+
+export default async function Community() {
+  const supabase = createClient()
+
+  const [
+    { data: pinnedRaw },
+    { data: regularRaw },
+    { data: categoryCounts },
+  ] = await Promise.all([
+    supabase
+      .from('threads')
+      .select('id, title, category, replies_count, profiles(username, avatar_url)')
+      .eq('is_pinned', true)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('threads')
+      .select('id, title, excerpt, category, replies_count, views_count, created_at, profiles(username, avatar_url)')
+      .eq('is_pinned', false)
+      .order('created_at', { ascending: false })
+      .limit(8),
+    supabase
+      .from('threads')
+      .select('category'),
+  ])
+
+  const pinnedThreads = (pinnedRaw ?? []) as Thread[]
+  const regularThreads = (regularRaw ?? []) as Thread[]
+
+  const countByCategory = (categoryCounts ?? []).reduce<Record<string, number>>(
+    (acc, row) => { acc[row.category] = (acc[row.category] ?? 0) + 1; return acc },
+    {}
+  )
+
   return (
     <div className="page" style={{ paddingTop: 0 }}>
 
@@ -59,17 +135,23 @@ export default function Community() {
             { glyph: 'DC', label: 'Discord.', status: '4,221 online', desc: 'The real-time channel. Trail runners, garage chatter, bug reports, tournament VC. Voice rooms staffed by mods 24/7.', stat: '28.4k members', delay: '1' },
             { glyph: 'FM', label: 'Forum.', status: '312 reading', desc: 'Long-form. Build guides, route walkthroughs, lore theory, feedback threads. Search-friendly archive of every patch since 0.4.', stat: '12,408 threads', delay: '2' },
             { glyph: 'R/', label: 'r/Vaportrails.', status: 'always open', desc: 'The street. Clips, memes, paint shares, "look at this trail," and the occasional pile-on. Lightly modded — riders run it.', stat: '34.2k subs', delay: '3' },
-          ].map(({ glyph, label, status, desc, stat, delay }) => (
-            <article key={label} className="platform" data-reveal data-delay={delay}>
-              <div className="top">
-                <div className="glyph-box">{glyph}</div>
-                <span className="live"><i />{status}</span>
-              </div>
-              <h3>{label}</h3>
-              <p>{desc}</p>
-              <div className="ftr"><b>{stat}</b><span className="arr">Join →</span></div>
-            </article>
-          ))}
+          ].map(({ glyph, label, status, desc, stat, delay }) => {
+            const isForumCard = label === 'Forum.'
+            const card = (
+              <article key={label} className="platform" data-reveal data-delay={delay}>
+                <div className="top">
+                  <div className="glyph-box">{glyph}</div>
+                  <span className="live"><i />{status}</span>
+                </div>
+                <h3>{label}</h3>
+                <p>{desc}</p>
+                <div className="ftr"><b>{stat}</b><span className="arr">Join →</span></div>
+              </article>
+            )
+            return isForumCard
+              ? <Link key={label} href="/forum" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>{card}</Link>
+              : card
+          })}
         </div>
       </section>
 
@@ -196,20 +278,20 @@ export default function Community() {
         {/* CATEGORIES */}
         <div className="forum-cats">
           {[
-            { glyph: '→', label: 'Trail Routes', desc: 'Optimal lines, district shortcuts, speedrun strats', threads: '4,821', color: 'cyan' },
-            { glyph: '⚙', label: 'Garage Builds', desc: 'Chassis configs, paint theory, decal showcases', threads: '2,103', color: 'amber' },
-            { glyph: '◈', label: 'World Lore', desc: 'Faction theory, NPC lore, hidden transmissions', threads: '1,842', color: 'crimson' },
-            { glyph: '◉', label: 'Events', desc: 'Tournament threads, bracket posts, recaps', threads: '892', color: 'green' },
-            { glyph: '⌘', label: 'Feedback', desc: 'Bug reports, feature requests, balance discussion', threads: '1,204', color: '' },
-            { glyph: '≋', label: 'Off-Grid', desc: 'Everything else — music, art, community stuff', threads: '1,546', color: '' },
-          ].map(({ glyph, label, desc, threads, color }) => (
+            { glyph: '→', label: 'Trail Routes', desc: 'Optimal lines, district shortcuts, speedrun strats', color: 'cyan' },
+            { glyph: '⚙', label: 'Garage Builds', desc: 'Chassis configs, paint theory, decal showcases', color: 'amber' },
+            { glyph: '◈', label: 'World Lore', desc: 'Faction theory, NPC lore, hidden transmissions', color: 'crimson' },
+            { glyph: '◉', label: 'Events', desc: 'Tournament threads, bracket posts, recaps', color: 'green' },
+            { glyph: '⌘', label: 'Feedback', desc: 'Bug reports, feature requests, balance discussion', color: '' },
+            { glyph: '≋', label: 'Off-Grid', desc: 'Everything else — music, art, community stuff', color: '' },
+          ].map(({ glyph, label, desc, color }) => (
             <article key={label} className={`forum-cat${color ? ` cat-${color}` : ''}`}>
               <div className="cat-glyph">{glyph}</div>
               <div className="cat-body">
                 <h4>{label}</h4>
                 <p>{desc}</p>
               </div>
-              <div className="cat-count"><b>{threads}</b><small>threads</small></div>
+              <div className="cat-count"><b>{(countByCategory[label] ?? 0).toLocaleString()}</b><small>threads</small></div>
             </article>
           ))}
         </div>
@@ -217,18 +299,22 @@ export default function Community() {
         {/* PINNED */}
         <div className="forum-pinned">
           <div className="pin-head">// pinned</div>
-          {[
-            { title: '[MEGATHREAD] Patch 0.7.3 Feedback & Bug Reports', cat: 'Feedback', catColor: '', replies: 284, hot: true },
-            { title: '[WELCOME] Network rules + code of conduct — read before posting', cat: 'Community', catColor: 'cyan', replies: 12, hot: false },
-          ].map(({ title, cat, catColor, replies, hot }) => (
-            <div key={title} className="pin-row">
-              <span className="pin-icon">📌</span>
-              <span className="pin-title">{title}</span>
-              <span className={`pin-cat${catColor ? ` cat-${catColor}` : ''}`}>{cat}</span>
-              <span className="pin-replies"><b>{replies}</b> replies</span>
-              {hot && <span className="pin-badge hot">Hot</span>}
-            </div>
-          ))}
+          {pinnedThreads.map((thread) => {
+            const catColor = CAT_COLOR[thread.category] ?? ''
+            return (
+              <Link
+                key={thread.id}
+                href={`/community/threads/${thread.id}`}
+                className="pin-row"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <span className="pin-icon">📌</span>
+                <span className="pin-title">{thread.title}</span>
+                <span className={`pin-cat${catColor ? ` cat-${catColor}` : ''}`}>{thread.category}</span>
+                <span className="pin-replies"><b>{thread.replies_count}</b> replies</span>
+              </Link>
+            )
+          })}
         </div>
 
         {/* RECENT THREADS */}
@@ -236,36 +322,36 @@ export default function Community() {
           <div className="thread-head">
             <span>Thread</span><span>Category</span><span>Replies</span><span>Views</span><span>Last post</span>
           </div>
-          {[
-            { title: 'Spire 12 optimal exit — the cut everyone misses at the bridge', excerpt: 'Found a 0.4s save at the bridge strut. Full breakdown with timestamps.', cat: 'Trail Routes', catColor: 'cyan', author: 'HexRunner', replies: 42, views: '1.2k', last: '14m ago' },
-            { title: 'Strider chassis vs Halo for ranked — full comparison v0.7.3', excerpt: 'Tested both for 80 hours post-patch. Numbers inside.', cat: 'Garage Builds', catColor: 'amber', author: 'Static.M', replies: 91, views: '3.4k', last: '38m ago' },
-            { title: 'The Glitch Cult signal — decoded? (lore theory)', excerpt: 'Found three hidden transmissions that spell something out.', cat: 'World Lore', catColor: 'crimson', author: 'Cinder_FM', replies: 28, views: '842', last: '1h ago' },
-            { title: 'Rollback netcode — is 38ms actually achievable on JP servers?', excerpt: 'Testing from Tokyo. Results not matching patch notes.', cat: 'Feedback', catColor: '', author: 'Halo.K', replies: 67, views: '2.1k', last: '2h ago' },
-            { title: 'Midnight Bracket #14 — team looking for fourth rider (rank 6+)', excerpt: 'We have three locked. Need a trail specialist, not a brawler.', cat: 'Events', catColor: 'green', author: 'dust.r', replies: 18, views: '412', last: '3h ago' },
-            { title: 'Custom soundtrack sync mod — does it violate ToS?', excerpt: 'Read the ToS three times, still unclear. Anyone got an official answer?', cat: 'Off-Grid', catColor: '', author: 'beat.r', replies: 34, views: '901', last: '4h ago' },
-            { title: 'District 04 brownout mechanic — intentional or bug?', excerpt: 'Two routes close randomly every few minutes. Is this a feature?', cat: 'Feedback', catColor: '', author: 'm_park', replies: 55, views: '1.8k', last: '5h ago' },
-            { title: 'Sharing my Neon East watercolor series — 12 pieces', excerpt: 'Took a month. All hand-painted, scanned at 600dpi.', cat: 'Off-Grid', catColor: '', author: 'trail.w', replies: 21, views: '634', last: '7h ago' },
-          ].map(({ title, excerpt, cat, catColor, author, replies, views, last }) => (
-            <div key={title} className="thread-row">
-              <div className="thread-info">
-                <div className="thread-av" />
-                <div>
-                  <div className="thread-title">{title}</div>
-                  <div className="thread-excerpt">{excerpt}</div>
-                  <div className="thread-author">by <b>{author}</b></div>
+          {regularThreads.map((thread) => {
+            const catColor = CAT_COLOR[thread.category] ?? ''
+            const author = thread.profiles?.username ?? 'unknown'
+            return (
+              <Link
+                key={thread.id}
+                href={`/community/threads/${thread.id}`}
+                className="thread-row"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <div className="thread-info">
+                  <div className="thread-av" />
+                  <div>
+                    <div className="thread-title">{thread.title}</div>
+                    <div className="thread-excerpt">{thread.excerpt}</div>
+                    <div className="thread-author">by <b>{author}</b></div>
+                  </div>
                 </div>
-              </div>
-              <span className={`thread-cat${catColor ? ` cat-${catColor}` : ''}`}>{cat}</span>
-              <span className="thread-stat">{replies}<small>replies</small></span>
-              <span className="thread-stat">{views}<small>views</small></span>
-              <span className="thread-last">{last}</span>
-            </div>
-          ))}
+                <span className={`thread-cat${catColor ? ` cat-${catColor}` : ''}`}>{thread.category}</span>
+                <span className="thread-stat">{thread.replies_count}<small>replies</small></span>
+                <span className="thread-stat">{fmtViews(thread.views_count)}<small>views</small></span>
+                <span className="thread-last">{relativeTime(thread.created_at)}</span>
+              </Link>
+            )
+          })}
         </div>
 
         <div className="forum-footer">
-          <Link href="#" className="btn cyan">Browse all 12,408 threads <span className="glyph">→</span></Link>
-          <Link href="#" className="btn primary">New thread <span className="glyph">+</span></Link>
+          <Link href="/forum" className="btn cyan">Browse all 12,408 threads <span className="glyph">→</span></Link>
+          <Link href="/forum/new" className="btn primary">New thread <span className="glyph">+</span></Link>
         </div>
       </section>
 

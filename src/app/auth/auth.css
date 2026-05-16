@@ -1,0 +1,308 @@
+/* =========================================================
+   AUTH — access terminal
+   ========================================================= */
+
+.auth-shell {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-wrap {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-eyebrow {
+  display: block;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* ===== card ===== */
+/* Extends .panel.cut from globals — adds stronger border + ambient glow */
+.auth-card {
+  overflow: hidden;
+  border-color: var(--b-2);
+  box-shadow: 0 0 60px -20px rgba(76,201,240,.12);
+}
+
+/* 32px grid mesh inside card — matches .ph::before pattern */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 100% 120% at 50% 0%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 120% at 50% 0%, black 30%, transparent 100%);
+}
+
+/* Cut-corner cyan accent — fills the top-right clip notch */
+.auth-corner-mark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 2;
+  background: var(--cyan);
+  opacity: .3;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+/* ===== tabs ===== */
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--b-2);
+  position: relative;
+  z-index: 1;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 18px 20px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--t-3);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color .18s, border-color .18s, background .18s;
+}
+
+.auth-tab:hover {
+  color: var(--t-2);
+  background: rgba(255,255,255,.02);
+}
+
+.auth-tab.active {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+  background: rgba(76,201,240,.04);
+  text-shadow: 0 0 18px rgba(76,201,240,.35);
+}
+
+/* ===== form ===== */
+.auth-form {
+  padding: 32px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-mode-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--t-4);
+  margin-bottom: -6px;
+}
+
+/* ===== field ===== */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--t-3);
+  font-weight: 500;
+}
+
+/* Input wrapper — mirrors news.css .form pattern */
+.auth-input-wrap {
+  display: flex;
+  background: var(--bg-3);
+  border: 1px solid var(--b-2);
+  box-shadow: inset 2px 0 0 transparent;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.auth-input-wrap:focus-within {
+  border-color: var(--cyan);
+  box-shadow: inset 2px 0 0 var(--cyan), 0 0 16px -6px var(--cyan-g);
+}
+
+.auth-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 16px 18px;
+  color: var(--t-1);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .18em;
+}
+
+.auth-input::placeholder {
+  color: var(--t-4);
+  letter-spacing: .12em;
+}
+
+/* ===== submit ===== */
+/* Extends .btn.primary — only adds full-width + center alignment */
+.auth-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 16px 22px;
+  margin-top: 4px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* ===== footer link ===== */
+.auth-footer-link {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-link {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--t-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color .15s;
+  text-decoration: underline;
+  text-decoration-color: var(--b-3);
+  text-underline-offset: 3px;
+}
+
+.auth-link:hover {
+  color: var(--cyan);
+  text-decoration-color: var(--cyan);
+}
+
+/* ===== status bar ===== */
+.auth-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--t-4);
+}
+
+.auth-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(35,209,139,.6);
+  flex: none;
+}
+
+/* ===== google button ===== */
+/* Extends .btn from globals — adds full-width + google glyph spacing */
+.auth-google-btn {
+  width: 100%;
+  justify-content: center;
+  gap: 12px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.auth-google-glyph {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--cyan);
+}
+
+/* ===== divider ===== */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.auth-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--b-2);
+}
+
+.auth-divider-text {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--t-4);
+  white-space: nowrap;
+}
+
+/* ===== error banner ===== */
+/* Matches .panel.crimson-edge treatment from globals */
+.auth-error {
+  padding: 12px 16px;
+  background: var(--bg-3);
+  border: 1px solid var(--b-2);
+  box-shadow: inset 3px 0 0 var(--crimson);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--t-2);
+  line-height: 1.5;
+}
+
+.auth-error-prefix {
+  color: var(--crimson);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* ===== responsive ===== */
+@media (max-width: 520px) {
+  .auth-shell {
+    align-items: flex-start;
+    padding-top: 100px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .auth-wrap {
+    max-width: 100%;
+  }
+
+  .auth-form {
+    padding: 24px 22px 28px;
+  }
+
+  .auth-tab {
+    padding: 14px 12px;
+    font-size: 10px;
+  }
+}

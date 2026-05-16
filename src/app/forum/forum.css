@@ -1,0 +1,302 @@
+/* =========================================================
+   FORUM — shared tokens
+   Inputs, labels, and error banner are 1:1 copies of the
+   rules in auth/auth.css so the visual language is identical.
+   ========================================================= */
+
+/* ===== field ===== */
+.forum-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.forum-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--t-3);
+  font-weight: 500;
+}
+
+/* Input wrapper — mirrors auth.css .auth-input-wrap exactly */
+.forum-input-wrap {
+  display: flex;
+  background: var(--bg-3);
+  border: 1px solid var(--b-2);
+  box-shadow: inset 2px 0 0 transparent;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.forum-input-wrap:focus-within {
+  border-color: var(--cyan);
+  box-shadow: inset 2px 0 0 var(--cyan), 0 0 16px -6px var(--cyan-g);
+}
+
+.forum-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 16px 18px;
+  color: var(--t-1);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .18em;
+}
+
+.forum-input::placeholder {
+  color: var(--t-4);
+  letter-spacing: .12em;
+}
+
+textarea.forum-input {
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.6;
+}
+
+/* ===== submit — mirrors .auth-submit ===== */
+.forum-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 16px 22px;
+  margin-top: 4px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* ===== error banner — mirrors .auth-error ===== */
+.forum-error {
+  padding: 12px 16px;
+  background: var(--bg-3);
+  border: 1px solid var(--b-2);
+  box-shadow: inset 3px 0 0 var(--crimson);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--t-2);
+  line-height: 1.5;
+}
+
+.forum-error-prefix {
+  color: var(--crimson);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* ===== header strip ===== */
+.forum-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* ===== discussion card (list view) ===== */
+.forum-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--b-1);
+  box-shadow: inset 3px 0 0 var(--cyan);
+  padding: 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s;
+}
+
+.forum-card:hover {
+  border-color: var(--b-3);
+  transform: translateY(-2px);
+}
+
+.forum-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forum-card-title {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--t-1);
+}
+
+.forum-card-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--b-1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.forum-card-footer .glyph {
+  transition: transform .2s;
+}
+
+.forum-card:hover .forum-card-footer .glyph {
+  transform: translateX(4px);
+}
+
+/* ===== thread detail focal card ===== */
+.forum-thread-card {
+  background: var(--bg-2);
+  border: 1px solid var(--b-2);
+  box-shadow: inset 3px 0 0 var(--cyan), 0 0 60px -20px rgba(76,201,240,.1);
+  padding: 40px;
+  position: relative;
+  margin-bottom: 48px;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+/* grid mesh inside focal card — mirrors .auth-card::before */
+.forum-thread-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 100% 120% at 50% 0%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 120% at 50% 0%, black 30%, transparent 100%);
+}
+
+.forum-thread-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.forum-thread-title {
+  margin: 0 0 24px;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.forum-thread-body {
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--t-2);
+  white-space: pre-wrap;
+}
+
+/* ===== comment input card ===== */
+.forum-comment-form {
+  background: var(--bg-2);
+  border: 1px solid var(--b-1);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* ===== comment item ===== */
+.forum-comment {
+  background: var(--bg-2);
+  border: 1px solid var(--b-1);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.forum-comment-body {
+  font-family: var(--f-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--t-1);
+  white-space: pre-wrap;
+}
+
+/* ===== section label ===== */
+.forum-section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.forum-section-label i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+  box-shadow: 0 0 12px var(--cyan-g);
+  flex-shrink: 0;
+}
+
+.forum-section-label h2 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* ===== empty state ===== */
+.forum-empty {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--t-4);
+  letter-spacing: .18em;
+  padding: 24px 0;
+}
+
+/* ===== back link ===== */
+.forum-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-decoration: none;
+  margin-bottom: 28px;
+  transition: color .15s;
+}
+
+.forum-back:hover { color: var(--t-1); }
+
+/* ===== comment submit (inline, not full-width) ===== */
+.forum-comment-submit {
+  align-self: flex-end;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+/* ===== loading / redirect guard ===== */
+.forum-gate {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}

@@ -16,8 +16,6 @@ WORKDIR /tests
 COPY selenium_tests/requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN selenium-manager --browser chrome --debug
-
 COPY selenium_tests/ .
 
 CMD ["python", "-m", "pytest", ".", "-v", "--tb=short"]

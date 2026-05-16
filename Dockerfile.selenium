@@ -1,40 +1,28 @@
-# ─────────────────────────────────────────
-# Dockerfile.selenium — Selenium Test Runner
-# ─────────────────────────────────────────
-
 FROM python:3.11-slim
 
-# Install Chrome + ChromeDriver
 RUN apt-get update && apt-get install -y \
-    wget \
-    curl \
-    unzip \
-    gnupg \
+    wget curl unzip gnupg ca-certificates \
     --no-install-recommends
 
-# Add Google Chrome repo and install
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
-    >> /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable --no-install-recommends
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | \
+    gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+    > /etc/apt/sources.list.d/google-chrome.list
 
-# Install ChromeDriver matching Chrome version
-RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+') \
-    && CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%%.*}") \
-    && wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" \
-    && unzip chromedriver_linux64.zip \
-    && mv chromedriver /usr/local/bin/ \
-    && chmod +x /usr/local/bin/chromedriver \
-    && rm chromedriver_linux64.zip
+RUN apt-get update && apt-get install -y google-chrome-stable --no-install-recommends
+
+RUN CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+    wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm chromedriver_linux64.zip
 
 WORKDIR /tests
 
-# Install Python dependencies
 COPY selenium_tests/requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy test files
 COPY selenium_tests/ .
 
 CMD ["python", "-m", "pytest", "test_vaportrails.py", "-v", "--tb=short"]

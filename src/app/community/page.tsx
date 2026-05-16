@@ -22,7 +22,7 @@ type Thread = {
   views_count?: number
   created_at?: string
   is_pinned?: boolean
-  profiles: any
+  profiles: any; // ⚡ THE NUCLEAR OPTION. THIS BASS-BOOSTS PAST THE TYPE CHECKER
 }
 
 const CAT_COLOR: Record<string, string> = {

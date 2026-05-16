@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Vaportrails — Transmissions</title>
+<meta name="viewport" content="width=1320" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============ NEWS-PAGE ============ */
+  .pagehead{
+    padding:120px 0 60px;border-bottom:1px solid var(--b-2);position:relative;
+  }
+  .pagehead .eyebrow{margin-bottom:16px;display:block}
+  .pagehead h1{
+    margin:0;font-family:var(--f-display);font-weight:700;
+    font-size:140px;line-height:.88;letter-spacing:-.025em;text-transform:uppercase;
+  }
+  .pagehead h1 .accent{color:var(--cyan)}
+  .pagehead .lede{margin:30px 0 0;color:var(--t-2);max-width:60ch;font-size:18px}
+  .pagehead .stats{
+    margin-top:40px;display:flex;gap:60px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+  }
+  .pagehead .stats b{display:block;font-family:var(--f-display);font-size:24px;color:var(--cyan);letter-spacing:.02em;margin-top:4px;font-weight:600}
+
+  /* Filter bar (sticky) */
+  .filterbar{
+    position:sticky;top:64px;z-index:30;
+    margin:40px 0 50px;
+    padding:18px 24px;
+    background:rgba(10,12,20,.78);backdrop-filter:blur(14px) saturate(140%);
+    border:1px solid var(--b-2);
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+  }
+  .filterbar .search{
+    display:flex;align-items:center;gap:10px;
+    background:var(--bg-3);border:1px solid var(--b-2);
+    padding:8px 14px;min-width:280px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-3);
+  }
+  .filterbar .search input{
+    background:transparent;border:none;outline:none;width:100%;color:var(--t-1);
+    font:inherit;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .filterbar .search::before{content:"⌕";color:var(--cyan)}
+
+  /* Featured post */
+  .featured{
+    background:var(--bg-2);
+    border:1px solid var(--b-2);
+    display:grid;grid-template-columns:1.3fr 1fr;
+    margin-bottom:80px;
+    clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  }
+  .featured .ph{height:520px;border:none;border-right:1px solid var(--b-2)}
+  .featured .body{padding:42px 44px;display:flex;flex-direction:column;gap:18px}
+  .featured .tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .featured .tags .tag{
+    padding:5px 12px;font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    border:1px solid var(--b-2);color:var(--t-2);
+  }
+  .featured .tags .tag.cta{background:var(--crimson);border-color:var(--crimson);color:#fff;box-shadow:0 0 16px -4px var(--crimson-g)}
+  .featured .tags .tag.hot{color:var(--amber);border-color:var(--amber)}
+  .featured .date{font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3)}
+  .featured h2{
+    margin:6px 0 0;font-family:var(--f-display);font-weight:700;
+    font-size:48px;line-height:1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .featured h2 .accent{color:var(--cyan)}
+  .featured .desc{color:var(--t-2);line-height:1.55;max-width:46ch;margin:0}
+  .featured .byline{
+    margin-top:auto;display:flex;align-items:center;gap:14px;padding-top:18px;border-top:1px solid var(--b-1);
+  }
+  .featured .byline .av{
+    width:44px;height:44px;background:radial-gradient(circle at 30% 30%, var(--cyan-g), var(--bg-3));
+    border:1px solid var(--b-2);
+  }
+  .featured .byline .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+  .featured .byline .who small{display:block;color:var(--t-3);font-size:10px;margin-top:3px}
+
+  /* Post grid */
+  .posts{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:30px}
+  .post{
+    background:var(--bg-2);border:1px solid var(--b-1);
+    display:flex;flex-direction:column;cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .post:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .post .thumb{
+    height:200px;position:relative;
+    border-bottom:1px solid var(--b-2);
+    background:
+      radial-gradient(circle at 50% 40%, rgba(76,201,240,.16), transparent 60%),
+      linear-gradient(135deg, #141828, #0a0c14);
+  }
+  .post .thumb::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:24px 24px;
+  }
+  .post .thumb .pill{
+    position:absolute;top:12px;left:12px;
+    padding:5px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--cyan);background:rgba(0,0,0,.6);border:1px solid var(--cyan);backdrop-filter:blur(6px);
+  }
+  .post .thumb .pill.event{color:var(--crimson);border-color:var(--crimson)}
+  .post .thumb .pill.lore{color:var(--amber);border-color:var(--amber)}
+  .post .thumb .pill.community{color:var(--green);border-color:var(--green)}
+  .post .body{padding:22px 24px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .post .meta-row{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3)}
+  .post h3{
+    margin:4px 0 0;font-family:var(--f-display);font-weight:700;font-size:22px;
+    line-height:1.1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .post p{margin:0;font-size:14px;color:var(--t-2);line-height:1.5}
+  .post .more{
+    margin-top:auto;padding-top:14px;border-top:1px solid var(--b-1);
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan);
+  }
+
+  .loadmore{display:flex;justify-content:center;margin:0 0 100px}
+
+  /* Patch notes */
+  .patches{margin-bottom:120px}
+  .patch{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:grid;grid-template-columns:200px 1fr 150px;
+    margin-bottom:-1px;
+    transition:border-color .2s ease;
+  }
+  .patch:hover{border-color:var(--b-3)}
+  .patch .ver{
+    padding:28px 24px;border-right:1px solid var(--b-2);
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .patch .ver small{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3)}
+  .patch .ver b{
+    font-family:var(--f-display);font-weight:700;font-size:34px;
+    letter-spacing:-.01em;color:var(--cyan);text-shadow:0 0 16px var(--cyan-g);
+  }
+  .patch .ver .badge{
+    border:1px solid var(--b-2);padding:4px 10px;
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;
+    display:inline-block;width:fit-content;color:var(--t-2);margin-top:auto;
+  }
+  .patch .ver .badge.hot{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+  .patch .ver .badge.major{background:var(--amber);color:#0a0c14;border-color:var(--amber)}
+  .patch .changes{padding:28px 32px;display:flex;flex-direction:column;gap:8px}
+  .patch .changes h4{
+    margin:0 0 6px;font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .patch .changes ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;color:var(--t-2);font-size:14px;line-height:1.45}
+  .patch .changes li{display:flex;gap:10px;align-items:flex-start}
+  .patch .changes li::before{
+    content:"+";font-family:var(--f-mono);font-weight:700;color:var(--green);
+    width:14px;flex:none;
+  }
+  .patch .changes li.minus::before{content:"−";color:var(--crimson)}
+  .patch .changes li.fix::before{content:"~";color:var(--amber)}
+  .patch .stats{
+    border-left:1px solid var(--b-2);padding:28px 22px;
+    display:flex;flex-direction:column;gap:12px;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);
+  }
+  .patch .stats b{display:block;font-family:var(--f-display);font-size:18px;color:var(--t-1);letter-spacing:.02em;margin-top:2px;font-weight:600}
+
+  /* Devlogs */
+  .devlogs{margin-bottom:120px}
+  .devlog{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:grid;grid-template-columns:1fr 1.4fr;
+    margin-bottom:22px;
+    transition:border-color .2s ease;
+  }
+  .devlog:hover{border-color:var(--cyan)}
+  .devlog.flip{grid-template-columns:1.4fr 1fr}
+  .devlog .ph{height:380px;border:none;border-right:1px solid var(--b-2)}
+  .devlog.flip .ph{border-right:none;border-left:1px solid var(--b-2);order:2}
+  .devlog .body{padding:36px 40px;display:flex;flex-direction:column;gap:16px}
+  .devlog .body .tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan)}
+  .devlog h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:42px;line-height:.95;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .devlog h3 .accent{color:var(--cyan)}
+  .devlog p{margin:0;color:var(--t-2);font-size:15px;line-height:1.6}
+  .devlog .ftr{
+    display:flex;gap:32px;margin-top:auto;padding-top:18px;border-top:1px solid var(--b-1);
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);
+  }
+  .devlog .ftr b{color:var(--t-1);display:block;margin-top:2px;font-size:14px;letter-spacing:.04em}
+
+  /* Signup */
+  .signup{
+    background:
+      radial-gradient(ellipse at 100% 50%, rgba(76,201,240,.15), transparent 60%),
+      var(--bg-2);
+    border:1px solid var(--b-2);
+    padding:60px 60px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+    margin-bottom:60px;position:relative;overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  }
+  .signup::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask:linear-gradient(180deg, transparent, black 30%, black 70%, transparent);
+  }
+  .signup .left{position:relative;z-index:1}
+  .signup .left .eyebrow{margin-bottom:14px;display:block}
+  .signup h2{
+    margin:0 0 8px;font-family:var(--f-display);font-weight:700;
+    font-size:48px;line-height:.95;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .signup h2 .accent{color:var(--cyan)}
+  .signup p{margin:0;color:var(--t-2);max-width:50ch}
+  .signup .form{
+    position:relative;z-index:1;display:flex;
+    border:1px solid var(--b-3);background:var(--bg-3);
+  }
+  .signup .form input{
+    border:none;background:transparent;outline:none;
+    padding:18px 22px;width:300px;color:var(--t-1);
+    font:inherit;font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .signup .form input::placeholder{color:var(--t-4)}
+  .signup .form button{
+    border:none;background:var(--crimson);color:#fff;
+    padding:0 28px;font:inherit;font-family:var(--f-mono);font-size:11px;
+    letter-spacing:.22em;text-transform:uppercase;font-weight:600;cursor:pointer;
+    transition:background .15s ease;
+  }
+  .signup .form button:hover{background:var(--crimson-h)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="Home.html" class="brand"><i></i>Vaportrails<span class="accent">// vpr.trl</span></a>
+  <ul class="links">
+    <li><a href="Home.html">Home</a></li>
+    <li><a href="Lore.html">About</a></li>
+    <li><a href="News.html" class="current">News</a></li>
+    <li><a href="Lore.html">Lore</a></li>
+    <li><a href="Community.html">Community</a></li>
+  </ul>
+  <div class="actions">
+    <span class="lang">EN ▾</span>
+    <a class="btn sm" href="#">Sign in</a>
+    <a class="btn primary sm" href="#play">▶ Play</a>
+  </div>
+</nav>
+
+<div class="page" style="padding-top:0">
+
+  <!-- PAGE HEADER -->
+  <header class="pagehead">
+    <span class="eyebrow">// section 03 · the wire</span>
+    <h1>Trans<span class="accent">missions</span>.</h1>
+    <p class="lede">Patch notes, devlogs, world events. Everything echoing out of the underground. Tune your antenna.</p>
+    <div class="stats">
+      <span>posts<b>184</b></span>
+      <span>subscribers<b>42,108</b></span>
+      <span>last update<b>05·12·26</b></span>
+      <span>rss<b style="color:var(--green)">available</b></span>
+    </div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div class="filterbar">
+    <div class="chips">
+      <span class="chip on">All</span>
+      <span class="chip">Patch notes</span>
+      <span class="chip">Dev logs</span>
+      <span class="chip">Events</span>
+      <span class="chip">Lore drops</span>
+      <span class="chip">Community</span>
+    </div>
+    <div class="search"><input placeholder="search transmissions…" /></div>
+  </div>
+
+  <!-- FEATURED -->
+  <article class="featured">
+    <div class="ph">
+      <div class="corners"><i></i></div>
+      <div class="lbl">// FEATURED · 16:10 · NETCODE</div>
+    </div>
+    <div class="body">
+      <div class="tags">
+        <span class="tag cta">Featured</span>
+        <span class="tag">Patch 0.7.3</span>
+        <span class="tag hot">Hot</span>
+      </div>
+      <div class="date">May 12, 2026 · 6 min read</div>
+      <h2>Reflex netcode <span class="accent">rewrite</span> — 38ms median, no input clipping.</h2>
+      <p class="desc">We rebuilt the netcode from scratch on a rollback-style frame buffer. Tournament players asked for one frame; we gave them one and a half. Full breakdown inside, with graphs.</p>
+      <div class="byline">
+        <div class="av"></div>
+        <div class="who">Kira Voss<small>Lead Engineer · @k.voss</small></div>
+        <a class="btn cyan sm" style="margin-left:auto" href="#">Read post <span class="glyph">→</span></a>
+      </div>
+    </div>
+  </article>
+
+  <!-- POST GRID -->
+  <div class="section-head">
+    <div class="left">
+      <span class="eyebrow">// 02 · latest on the wire</span>
+      <h2>Recent <span class="accent">transmissions</span>.</h2>
+    </div>
+    <span class="mono" style="color:var(--t-3);font-size:11px;letter-spacing:.24em;text-transform:uppercase">Showing 9 of 184</span>
+  </div>
+
+  <section class="posts">
+    <article class="post"><div class="thumb"><span class="pill">Dev log</span></div><div class="body">
+      <div class="meta-row"><span>05 · 04 · 26</span><span>22 min read</span></div>
+      <h3>Building the rain shader.</h3>
+      <p>How we faked wet asphalt without bankrupting the GPU. Devlog with shader graphs.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill event">Event · live</span></div><div class="body">
+      <div class="meta-row"><span>05 · 17 · 26</span><span>register open</span></div>
+      <h3>Midnight tournament.</h3>
+      <p>72-hour single elim. Prizes include in-game decals and a real motorcycle.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill lore">Lore drop</span></div><div class="body">
+      <div class="meta-row"><span>04 · 15 · 26</span><span>9 min read</span></div>
+      <h3>Who lit the first neon?</h3>
+      <p>A short fiction piece from the studio's lore writer. Canon (mostly).</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill">Patch 0.7.2</span></div><div class="body">
+      <div class="meta-row"><span>04 · 08 · 26</span><span>2 min read</span></div>
+      <h3>Hotfix: trail vapor flicker.</h3>
+      <p>That one weird bug where vapor disappeared at 144hz. Squashed.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill community">Community</span></div><div class="body">
+      <div class="meta-row"><span>04 · 01 · 26</span><span>5 min read</span></div>
+      <h3>Decal contest winners.</h3>
+      <p>Twelve community decals are now in the game. Full gallery + interviews.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill">Dev log</span></div><div class="body">
+      <div class="meta-row"><span>03 · 21 · 26</span><span>14 min read</span></div>
+      <h3>Audio: scoring the underground.</h3>
+      <p>Conversation with composer about adaptive music + a streamable mixtape.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill">Patch 0.7.0</span></div><div class="body">
+      <div class="meta-row"><span>03 · 14 · 26</span><span>8 min read</span></div>
+      <h3>The garage update.</h3>
+      <p>Custom paint, 14 new chassis kits, sticker layer rework.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill event">Event recap</span></div><div class="body">
+      <div class="meta-row"><span>03 · 02 · 26</span><span>recap</span></div>
+      <h3>Glitch festival recap.</h3>
+      <p>What happened inside the 6-hour in-game underground rave. Spoiler: chaos.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+
+    <article class="post"><div class="thumb"><span class="pill lore">Lore drop</span></div><div class="body">
+      <div class="meta-row"><span>02 · 18 · 26</span><span>11 min read</span></div>
+      <h3>The Bureau dossier.</h3>
+      <p>Field notes on the neon bureau. Memos. Polaroids. Redactions.</p>
+      <div class="more"><span>Read →</span></div></div></article>
+  </section>
+
+  <div class="loadmore"><a class="btn" href="#">Load 9 more transmissions <span class="glyph">↓</span></a></div>
+
+  <!-- PATCH NOTES -->
+  <section class="patches">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 03 · version history</span>
+        <h2>Patch notes <span class="accent">archive</span>.</h2>
+      </div>
+      <a class="btn sm" href="#">View all 47 versions <span class="glyph">→</span></a>
+    </div>
+
+    <article class="patch">
+      <div class="ver"><small>05.12.26</small><b>0.7.3</b><span class="badge hot">Hot</span></div>
+      <div class="changes">
+        <h4>Reflex netcode rewrite</h4>
+        <ul>
+          <li>Rollback-style frame buffer — 38ms median latency</li>
+          <li>Input ring-buffer increased to 12 frames</li>
+          <li class="fix">Fixed: ghosting on rivals during high-ping bursts</li>
+          <li class="fix">Fixed: vapor trails clipping at 144hz</li>
+          <li class="minus">Removed: legacy lockstep mode (RIP)</li>
+        </ul>
+      </div>
+      <div class="stats"><span>downloads<b>1.2M</b></span><span>size<b>820 MB</b></span><span>required<b style="color:var(--crimson)">YES</b></span></div>
+    </article>
+
+    <article class="patch">
+      <div class="ver"><small>04.08.26</small><b>0.7.2</b><span class="badge">Hotfix</span></div>
+      <div class="changes">
+        <h4>Trail vapor + decal fixes</h4>
+        <ul>
+          <li class="fix">Fixed: vapor invisible at 144hz</li>
+          <li class="fix">Fixed: decals stretching on curved chassis</li>
+          <li class="fix">Fixed: garage paint preview wrong on metallic</li>
+        </ul>
+      </div>
+      <div class="stats"><span>downloads<b>840K</b></span><span>size<b>180 MB</b></span><span>required<b style="color:var(--crimson)">YES</b></span></div>
+    </article>
+
+    <article class="patch">
+      <div class="ver"><small>03.14.26</small><b>0.7.0</b><span class="badge major">Major</span></div>
+      <div class="changes">
+        <h4>The garage update</h4>
+        <ul>
+          <li>14 new chassis kits — Strider, Halo, Cinder, etc.</li>
+          <li>Custom paint with metallic + matte layer system</li>
+          <li>Sticker layer rework — 8 layers, full transform</li>
+          <li>New garage hub: Neon East workshop</li>
+          <li class="fix">Fixed: 142 reported bugs (full list inside)</li>
+        </ul>
+      </div>
+      <div class="stats"><span>downloads<b>2.4M</b></span><span>size<b>3.1 GB</b></span><span>required<b style="color:var(--crimson)">YES</b></span></div>
+    </article>
+
+    <article class="patch">
+      <div class="ver"><small>02.04.26</small><b>0.6.5</b><span class="badge">Patch</span></div>
+      <div class="changes">
+        <h4>Balance + matchmaking</h4>
+        <ul>
+          <li>Rebalanced 9 weapon types (full table inside)</li>
+          <li>Matchmaking now uses skill + connection quality</li>
+          <li>Ranked decay reduced from 7 to 14 days</li>
+          <li class="minus">Removed: low-pop region merging on Tue/Thu</li>
+        </ul>
+      </div>
+      <div class="stats"><span>downloads<b>1.8M</b></span><span>size<b>410 MB</b></span><span>required<b style="color:var(--crimson)">YES</b></span></div>
+    </article>
+  </section>
+
+  <!-- DEVLOGS -->
+  <section class="devlogs">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 04 · under the hood</span>
+        <h2>Dev logs, <span class="accent">long form</span>.</h2>
+      </div>
+      <a class="btn cyan sm" href="#">Subscribe to devlogs <span class="glyph">→</span></a>
+    </div>
+
+    <article class="devlog">
+      <div class="ph"><div class="corners"><i></i></div><div class="lbl">// DEVLOG 014 · AUDIO</div></div>
+      <div class="body">
+        <span class="tag">// devlog 014 · audio</span>
+        <h3>Scoring the <span class="accent">underground</span>.</h3>
+        <p>An hour with composer Mira Hale on adaptive music, layered drum machines, and the moment a song decides to stop existing. Includes a streamable mixtape and three deleted tracks the team kept on a thumb drive.</p>
+        <p>Topics: tempo locking the chase, "scary key" theory, why the menu music is in 7/8.</p>
+        <div class="ftr"><span>read<b>14 min</b></span><span>by<b>M. Hale</b></span><span>refs<b>12</b></span></div>
+      </div>
+    </article>
+
+    <article class="devlog flip">
+      <div class="ph"><div class="corners"><i></i></div><div class="lbl">// DEVLOG 013 · RENDERING</div></div>
+      <div class="body">
+        <span class="tag">// devlog 013 · rendering</span>
+        <h3>Building the <span class="accent">rain shader</span>.</h3>
+        <p>How we faked wet asphalt without bankrupting the GPU. A walk through five shader iterations, two missteps, and the breakthrough that came from staring at a coffee spill at 2am.</p>
+        <p>Includes interactive shader graph, performance budget, and a frame-by-frame teardown.</p>
+        <div class="ftr"><span>read<b>22 min</b></span><span>by<b>D. Ortega</b></span><span>refs<b>27</b></span></div>
+      </div>
+    </article>
+
+    <article class="devlog">
+      <div class="ph"><div class="corners"><i></i></div><div class="lbl">// DEVLOG 012 · NARRATIVE</div></div>
+      <div class="body">
+        <span class="tag">// devlog 012 · world</span>
+        <h3>How a district <span class="accent">gets its name</span>.</h3>
+        <p>The narrative team's process for naming neighborhoods, gangs, and small shops. Real graffiti references, a poetry generator we threw out, and the cardinal rule of never naming anything "Neo-".</p>
+        <div class="ftr"><span>read<b>9 min</b></span><span>by<b>L. Park</b></span><span>refs<b>5</b></span></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- SIGNUP -->
+  <section class="signup">
+    <div class="left">
+      <span class="eyebrow">// transmission service · no spam</span>
+      <h2>Get on the <span class="accent">wire</span>.</h2>
+      <p>Devlogs, patch notes, and the occasional lore drop — straight to your inbox. Unsub anytime.</p>
+    </div>
+    <form class="form" onsubmit="event.preventDefault()">
+      <input type="email" placeholder="you@signal.net" />
+      <button type="submit">Subscribe →</button>
+    </form>
+  </section>
+
+  <!-- BIG CTA -->
+  <section class="section" id="play">
+    <div class="bigcta">
+      <div>
+        <span class="eyebrow">// free · browser build · no install</span>
+        <h2 style="margin-top:18px">Jack in.<br><span class="accent">Burn rubber</span>.</h2>
+      </div>
+      <div class="meta">
+        <span class="sub">/ 80mb · 60fps · webgl 2</span>
+        <a class="btn primary lg" href="#"><span class="glyph">▶</span> Play Vaportrails now</a>
+        <span class="sub" style="opacity:.6">also on steam · ps · xbox</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <div class="brand-block">
+      <span class="brand"><i></i>Vaportrails</span>
+      <p>Neon drift. Underground network. 2099. A small studio above a soba shop in Neon East.</p>
+      <div class="socials"><span>X</span><span>YT</span><span>DC</span><span>TW</span><span>IG</span></div>
+    </div>
+    <div class="col"><h4>Game</h4><ul><li><a href="Home.html">Play</a></li><li><a href="#">Features</a></li><li><a href="#">System reqs</a></li><li><a href="#">Roadmap</a></li></ul></div>
+    <div class="col"><h4>World</h4><ul><li><a href="Lore.html">Lore</a></li><li><a href="Lore.html">Characters</a></li><li><a href="#">Map</a></li><li><a href="#">Soundtrack</a></li></ul></div>
+    <div class="col"><h4>Studio</h4><ul><li><a href="Lore.html">About</a></li><li><a href="News.html">News</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div class="bottom">
+      <span>© 2099 VAPORTRAILS / All glitches reserved</span>
+      <span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">EULA</a></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const nav = document.getElementById('nav');
+    function update(){
+      if(window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+</script>
+</body>
+</html>

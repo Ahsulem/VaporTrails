@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Vaportrails — Neon drift · 2099</title>
+<meta name="viewport" content="width=1320" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============ HOME-PAGE ============ */
+
+  /* HERO */
+  .hero{
+    position:relative;height:760px;margin-top:-72px;padding-top:72px;
+  }
+  .hero .frame{
+    position:absolute;inset:72px 0 0 0;overflow:hidden;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 50%, rgba(76,201,240,.22), transparent 65%),
+      radial-gradient(ellipse 70% 70% at 80% 70%, rgba(247,37,133,.18), transparent 60%),
+      radial-gradient(circle at 50% 110%, rgba(183,9,76,.35), transparent 50%),
+      linear-gradient(180deg, #0d1124 0%, #0a0c14 100%);
+  }
+  /* skyline silhouette via gradients */
+  .hero .skyline{
+    position:absolute;left:0;right:0;bottom:0;height:55%;pointer-events:none;
+    background:
+      linear-gradient(180deg, transparent, rgba(0,0,0,.4) 60%, rgba(0,0,0,.7)),
+      repeating-linear-gradient(90deg,
+        transparent 0 18px, rgba(76,201,240,.04) 18px 19px, transparent 19px 70px,
+        rgba(76,201,240,.06) 70px 71px, transparent 71px 130px);
+  }
+  .hero .skyline::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(0deg,
+        var(--bg-0) 0,
+        var(--bg-0) 18%,
+        transparent 18.1%),
+      linear-gradient(0deg,
+        transparent 22%,
+        rgba(8,10,18,.95) 22.1%,
+        rgba(8,10,18,.95) 24%,
+        transparent 24.1%),
+      linear-gradient(0deg,
+        transparent 28%,
+        rgba(10,12,22,.9) 28.1%,
+        rgba(10,12,22,.9) 32%,
+        transparent 32.1%);
+    mask:
+      repeating-linear-gradient(90deg,
+        black 0 30px, transparent 30px 40px, black 40px 90px,
+        transparent 90px 110px, black 110px 150px, transparent 150px 170px,
+        black 170px 220px, transparent 220px 240px);
+  }
+  .hero .skyline::after{
+    /* far skyline blocks */
+    content:"";position:absolute;left:0;right:0;bottom:18%;height:30%;
+    background:
+      repeating-linear-gradient(90deg,
+        rgba(76,201,240,.04) 0 2px, transparent 2px 60px,
+        rgba(76,201,240,.06) 60px 62px, transparent 62px 140px);
+    mask:linear-gradient(180deg, transparent 0%, black 40%, transparent 100%);
+  }
+  /* horizontal road glow */
+  .hero .road{
+    position:absolute;left:0;right:0;bottom:0;height:38%;pointer-events:none;
+    background:
+      linear-gradient(180deg, transparent 0%, rgba(183,9,76,.25) 60%, rgba(183,9,76,.5) 90%, transparent 100%);
+    mask:linear-gradient(180deg, transparent 0%, black 70%);
+  }
+  /* perspective rays */
+  .hero .rays{
+    position:absolute;left:50%;bottom:0;width:200%;height:55%;
+    transform:translateX(-50%);
+    background:
+      repeating-conic-gradient(from -90deg at 50% 100%,
+        rgba(247,37,133,.08) 0deg 4deg, transparent 4deg 14deg);
+    mask:linear-gradient(180deg, transparent 30%, black 70%, transparent 100%);
+    pointer-events:none;
+  }
+  .hero .grid-floor{
+    position:absolute;left:0;right:0;bottom:0;height:34%;pointer-events:none;
+    background:
+      linear-gradient(transparent 50%, rgba(76,201,240,.2) 50%),
+      linear-gradient(90deg, transparent 0px, transparent calc(100% - 1px), rgba(76,201,240,.2) calc(100% - 1px));
+    background-size:100% 14px, 80px 100%;
+    transform-origin:50% 100%;
+    transform:perspective(560px) rotateX(60deg) scaleY(2);
+    mask:radial-gradient(ellipse at 50% 100%, black 35%, transparent 80%);
+    opacity:.6;
+  }
+
+  .hero .scanlines{
+    position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:repeating-linear-gradient(to bottom, transparent 0 3px, rgba(0,0,0,.18) 3px 4px);
+    mix-blend-mode:overlay;
+  }
+  .hero .vignette{
+    position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, transparent 30%, rgba(0,0,0,.6) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 30%, transparent 70%, var(--bg-0) 100%);
+  }
+
+  /* play button (visual only) */
+  .hero .play{
+    position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);
+    width:92px;height:92px;border-radius:50%;
+    border:1.5px solid var(--cyan);
+    background:rgba(76,201,240,.10);
+    display:flex;align-items:center;justify-content:center;
+    z-index:3;backdrop-filter:blur(6px);
+    box-shadow:0 0 0 8px rgba(76,201,240,.08), 0 0 40px var(--cyan-g);
+    transition:transform .2s ease, background .2s ease;cursor:pointer;
+  }
+  .hero .play:hover{transform:translate(-50%,-50%) scale(1.06);background:rgba(76,201,240,.18)}
+  .hero .play::before{
+    content:"";border-left:18px solid var(--cyan);
+    border-top:12px solid transparent;border-bottom:12px solid transparent;
+    margin-left:5px;
+    filter:drop-shadow(0 0 8px var(--cyan-g));
+  }
+  .hero .play .ring{
+    position:absolute;inset:-14px;border:1px dashed rgba(76,201,240,.35);border-radius:50%;
+    animation:rotate 18s linear infinite;
+  }
+  @keyframes rotate{to{transform:rotate(360deg)}}
+
+  .hero .content{
+    position:absolute;left:36px;bottom:90px;z-index:4;max-width:780px;
+  }
+  .hero .eyebrow-row{
+    display:flex;align-items:center;gap:18px;margin-bottom:24px;
+  }
+  .hero .stat{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+    padding-left:14px;border-left:1px solid var(--b-2);
+  }
+  .hero .stat b{color:var(--t-1);font-weight:500}
+  .hero h1{
+    margin:0;font-family:var(--f-display);font-weight:700;
+    font-size:200px;line-height:.86;letter-spacing:-.025em;text-transform:uppercase;
+  }
+  .hero h1 .neon{
+    color:var(--crimson);
+    text-shadow:
+      0 0 24px rgba(247,37,133,.5),
+      0 0 4px rgba(247,37,133,.8);
+    position:relative;
+  }
+  .hero h1 .glitch{position:relative;display:inline-block}
+  .hero h1 .glitch::before,
+  .hero h1 .glitch::after{
+    content:attr(data-text);position:absolute;left:0;top:0;width:100%;
+    opacity:.55;mix-blend-mode:screen;pointer-events:none;
+  }
+  .hero h1 .glitch::before{color:var(--cyan);transform:translate(-2px,0);text-shadow:0 0 12px var(--cyan-g)}
+  .hero h1 .glitch::after{color:var(--crimson);transform:translate(2px,0)}
+
+  .hero .tagline{
+    margin:28px 0 36px;font-size:18px;color:var(--t-2);max-width:54ch;line-height:1.55;
+  }
+  .hero .ctas{display:flex;gap:14px}
+
+  /* HUD top labels on hero */
+  .hero .topbar{
+    position:absolute;top:96px;left:36px;right:36px;
+    display:flex;justify-content:space-between;align-items:flex-start;z-index:3;
+  }
+  .hero .topbar .cell{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);line-height:1.6}
+  .hero .topbar .cell b{display:block;color:var(--cyan);font-family:var(--f-display);font-size:14px;letter-spacing:.08em;font-weight:600;margin-bottom:2px}
+  .hero .topbar .cell.r{text-align:right}
+
+  /* scroll indicator */
+  .hero .scroll-cue{
+    position:absolute;bottom:30px;right:36px;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--t-3);writing-mode:vertical-rl;z-index:3;
+    display:flex;align-items:center;gap:14px;
+  }
+  .hero .scroll-cue::after{
+    content:"";width:1px;height:46px;background:linear-gradient(to bottom, var(--cyan), transparent);
+    animation:scrolldown 2s ease-in-out infinite;
+  }
+  @keyframes scrolldown{
+    0%,100%{transform:translateY(0);opacity:.3}
+    50%{transform:translateY(14px);opacity:1}
+  }
+
+  /* ============ FEATURES ============ */
+  .features{padding:120px 0 80px;position:relative}
+  .features .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .feat{
+    background:var(--bg-2);
+    border:1px solid var(--b-2);
+    padding:40px;display:flex;flex-direction:column;gap:18px;
+    min-height:500px;position:relative;overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .feat:hover{border-color:var(--b-3);transform:translateY(-2px)}
+  .feat .corner{
+    position:absolute;top:0;right:0;
+    font-family:var(--f-mono);font-size:84px;font-weight:700;color:rgba(255,255,255,.025);
+    line-height:.8;padding:24px 28px;letter-spacing:-.04em;pointer-events:none;
+  }
+  .feat .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan)}
+  .feat h3{
+    margin:0;font-family:var(--f-display);font-weight:700;
+    font-size:48px;line-height:.95;letter-spacing:-.01em;text-transform:uppercase;max-width:14ch;
+  }
+  .feat h3 .accent{color:var(--cyan)}
+  .feat p{margin:0;font-size:16px;line-height:1.55;color:var(--t-2);max-width:48ch}
+  .feat .media{
+    margin-top:auto;height:200px;position:relative;
+    border:1px solid var(--b-2);overflow:hidden;
+  }
+  .feat .media.combat{
+    background:
+      radial-gradient(circle at 30% 60%, rgba(247,37,133,.4), transparent 50%),
+      radial-gradient(circle at 75% 40%, rgba(76,201,240,.3), transparent 55%),
+      linear-gradient(135deg, #1a0f1f, #0a0c14);
+  }
+  .feat .media.world{
+    background:
+      radial-gradient(circle at 80% 80%, rgba(76,201,240,.35), transparent 55%),
+      radial-gradient(circle at 20% 30%, rgba(247,37,133,.2), transparent 50%),
+      linear-gradient(180deg, #0e1424 0%, #0a0c14 100%);
+  }
+  .feat .media::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:24px 24px;
+  }
+  .feat .media .lbl{
+    position:absolute;bottom:12px;left:12px;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-2);
+    padding:5px 9px;background:rgba(0,0,0,.6);border:1px solid var(--b-2);backdrop-filter:blur(6px);
+  }
+  .feat .specs{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding-top:18px;border-top:1px solid var(--b-1);
+  }
+  .feat .specs > div{display:flex;flex-direction:column;gap:2px}
+  .feat .specs small{font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-4)}
+  .feat .specs b{font-family:var(--f-display);font-size:18px;font-weight:600;letter-spacing:.04em;color:var(--cyan)}
+
+  /* ============ NEWS ============ */
+  .news{padding:60px 0 80px}
+  .news .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:28px}
+  .post{
+    background:var(--bg-2);border:1px solid var(--b-1);
+    display:flex;flex-direction:column;cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .post:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .post .thumb{
+    height:200px;position:relative;
+    border-bottom:1px solid var(--b-2);
+    background:
+      radial-gradient(circle at 50% 40%, rgba(76,201,240,.18), transparent 60%),
+      linear-gradient(135deg, #14182a, #0a0c14);
+  }
+  .post .thumb::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  .post .thumb .pill{
+    position:absolute;top:14px;left:14px;
+    padding:5px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--cyan);background:rgba(0,0,0,.6);border:1px solid var(--cyan);backdrop-filter:blur(6px);
+  }
+  .post .thumb .pill.event{color:var(--crimson);border-color:var(--crimson)}
+  .post .body{padding:22px 24px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .post .meta-row{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3)}
+  .post h3{
+    margin:4px 0 0;font-family:var(--f-display);font-weight:700;font-size:24px;
+    line-height:1.1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .post p{margin:0;font-size:14px;color:var(--t-2);line-height:1.5}
+  .post .more{
+    margin-top:auto;padding-top:14px;border-top:1px solid var(--b-1);
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan);
+  }
+  .post .more .glyph{font-size:14px;transition:transform .2s}
+  .post:hover .more .glyph{transform:translateX(4px)}
+
+  .news .readmore-row{display:flex;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="Home.html" class="brand"><i></i>Vaportrails<span class="accent">// vpr.trl</span></a>
+  <ul class="links">
+    <li><a href="Home.html" class="current">Home</a></li>
+    <li><a href="Lore.html">About</a></li>
+    <li><a href="News.html">News</a></li>
+    <li><a href="Lore.html">Lore</a></li>
+    <li><a href="Community.html">Community</a></li>
+  </ul>
+  <div class="actions">
+    <span class="lang">EN ▾</span>
+    <a class="btn sm" href="#">Sign in</a>
+    <a class="btn primary sm" href="#play">▶ Play</a>
+  </div>
+</nav>
+
+<div class="page" style="padding-top:0">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="frame">
+      <div class="grid-floor"></div>
+      <div class="rays"></div>
+      <div class="skyline"></div>
+      <div class="road"></div>
+      <div class="vignette"></div>
+      <div class="scanlines"></div>
+    </div>
+
+    <div class="topbar">
+      <div class="cell">
+        <b>// gameplay reel</b>
+        loop · 4k · 00:42 / 00:42
+      </div>
+      <div class="cell r">
+        <b>NEON EAST 2099</b>
+        district 04 · grid status unstable
+      </div>
+    </div>
+
+    <div class="play" aria-label="Play trailer">
+      <span class="ring"></span>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow-row">
+        <span class="eyebrow">// neon drift · 2099 · single player</span>
+        <span class="stat"><b>v0.7.3</b> · open beta</span>
+        <span class="stat"><b>42,108</b> riders online</span>
+      </div>
+      <h1 class="display">
+        Vapor<br>
+        <span class="neon glitch" data-text="Trails">Trails</span><span class="accent" style="color:var(--cyan)">.</span>
+      </h1>
+      <p class="tagline">Run the underground network through Neon East before the bureau catches up. Every drift leaves a trail. Every trail leaves a legend.</p>
+      <div class="ctas">
+        <a class="btn lg" href="Lore.html"><span class="glyph">◇</span> About Vaportrails</a>
+        <a class="btn primary lg" href="#play"><span class="glyph">▶</span> Play the game</a>
+      </div>
+    </div>
+
+    <div class="scroll-cue">SCROLL ↓ for transmission</div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 02 · what makes it tick</span>
+        <h2>Two pillars.<br>One trail of <span class="accent">vapor</span>.</h2>
+      </div>
+      <a class="btn cyan sm" href="Lore.html">Read the dossier <span class="glyph">→</span></a>
+    </div>
+
+    <div class="grid">
+      <article class="feat">
+        <span class="corner">01</span>
+        <span class="tag">// feature 01 · combat</span>
+        <h3>Neon-drenched <span class="accent">combat</span>.</h3>
+        <p>Real-time melee + ranged with a flow meter that rewards style chains. Slow-motion finishers, parry-into-trail mechanics, and the city itself as your third weapon.</p>
+        <div class="media combat">
+          <span class="lbl">// 04 · trail combo · style 5.4×</span>
+        </div>
+        <div class="specs">
+          <div><small>moves</small><b>48</b></div>
+          <div><small>chains</small><b>∞</b></div>
+          <div><small>weapons</small><b>17</b></div>
+        </div>
+      </article>
+
+      <article class="feat">
+        <span class="corner">02</span>
+        <span class="tag">// feature 02 · world</span>
+        <h3>An open <span class="accent">neo-grid</span>.</h3>
+        <p>Four interconnected districts you can run, climb, or carve through. Weather shifts the routes. Brownouts close highways. The city remembers what happened there last week.</p>
+        <div class="media world">
+          <span class="lbl">// 02 · district map · neon east</span>
+        </div>
+        <div class="specs">
+          <div><small>districts</small><b>04</b></div>
+          <div><small>routes</small><b>132</b></div>
+          <div><small>hideouts</small><b>28</b></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="news">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 03 · transmissions</span>
+        <h2>Latest from <span class="accent">the wire</span>.</h2>
+      </div>
+      <a class="btn sm" href="News.html">All updates <span class="glyph">→</span></a>
+    </div>
+
+    <div class="grid">
+      <article class="post" onclick="window.location.href='News.html'">
+        <div class="thumb"><span class="pill">Patch 0.7.3</span></div>
+        <div class="body">
+          <div class="meta-row"><span>05 · 12 · 26</span><span>6 min read</span></div>
+          <h3>Reflex netcode rewrite.</h3>
+          <p>Rollback frame buffer, 38ms median latency. Tournament players asked for one frame; we shipped one and a half.</p>
+          <div class="more"><span>Read transmission</span><span class="glyph">→</span></div>
+        </div>
+      </article>
+
+      <article class="post" onclick="window.location.href='News.html'">
+        <div class="thumb"><span class="pill">Dev log</span></div>
+        <div class="body">
+          <div class="meta-row"><span>05 · 04 · 26</span><span>22 min read</span></div>
+          <h3>Building the rain shader.</h3>
+          <p>How we faked wet asphalt without bankrupting the GPU. Five iterations, two missteps, one breakthrough.</p>
+          <div class="more"><span>Read transmission</span><span class="glyph">→</span></div>
+        </div>
+      </article>
+
+      <article class="post" onclick="window.location.href='Community.html'">
+        <div class="thumb"><span class="pill event">Event · live</span></div>
+        <div class="body">
+          <div class="meta-row"><span>05 · 17 · 26</span><span>register open</span></div>
+          <h3>Midnight bracket #14.</h3>
+          <p>72-hour single elim across 12 regions. Prizes include in-game decals and one (1) real motorcycle.</p>
+          <div class="more"><span>Read transmission</span><span class="glyph">→</span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="readmore-row">
+      <a class="btn" href="News.html">View all 184 transmissions <span class="glyph">↓</span></a>
+    </div>
+  </section>
+
+  <!-- BIG CTA -->
+  <section class="section" id="play">
+    <div class="bigcta">
+      <div>
+        <span class="eyebrow">// it's free · browser build · no install</span>
+        <h2 style="margin-top:18px">Jack in.<br><span class="accent">Burn rubber</span>.</h2>
+      </div>
+      <div class="meta">
+        <span class="sub">/ 80mb · 60fps · webgl 2</span>
+        <a class="btn primary lg" href="#"><span class="glyph">▶</span> Play Vaportrails now</a>
+        <span class="sub" style="opacity:.6">also on steam · ps · xbox</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <div class="brand-block">
+      <span class="brand"><i></i>Vaportrails</span>
+      <p>Neon drift. Underground network. 2099. A small studio above a soba shop in Neon East.</p>
+      <div class="socials"><span>X</span><span>YT</span><span>DC</span><span>TW</span><span>IG</span></div>
+    </div>
+    <div class="col">
+      <h4>Game</h4>
+      <ul><li><a href="#play">Play</a></li><li><a href="#">Features</a></li><li><a href="#">System reqs</a></li><li><a href="#">Roadmap</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>World</h4>
+      <ul><li><a href="Lore.html">Lore</a></li><li><a href="Lore.html">Characters</a></li><li><a href="#">Map</a></li><li><a href="#">Soundtrack</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>Studio</h4>
+      <ul><li><a href="Lore.html">About</a></li><li><a href="News.html">News</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+    <div class="bottom">
+      <span>© 2099 VAPORTRAILS / All glitches reserved</span>
+      <span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">EULA</a></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const nav = document.getElementById('nav');
+    function update(){
+      if(window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+</script>
+</body>
+</html>

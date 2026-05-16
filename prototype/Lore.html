@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Vaportrails — Lore · The World of 2099</title>
+<meta name="viewport" content="width=1320" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============ LORE-PAGE ============ */
+
+  /* HERO */
+  .lorehero{
+    position:relative;height:680px;margin:0 -36px 80px;overflow:hidden;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 30%, rgba(76,201,240,.22), transparent 65%),
+      radial-gradient(ellipse 60% 80% at 20% 70%, rgba(183,9,76,.20), transparent 60%),
+      linear-gradient(180deg, #0a0c14 0%, #0a0c14 100%);
+  }
+  .lorehero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask:radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+  }
+  /* city silhouette */
+  .lorehero .silhouette{
+    position:absolute;left:0;right:0;bottom:0;height:60%;pointer-events:none;
+    background:
+      linear-gradient(180deg, transparent 0%, rgba(0,0,0,.4) 70%, var(--bg-0) 100%);
+  }
+  .lorehero .silhouette::before{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:55%;
+    background:
+      linear-gradient(180deg, transparent, rgba(76,201,240,.04) 30%, transparent),
+      repeating-linear-gradient(90deg,
+        rgba(0,0,0,.85) 0 50px, transparent 50px 80px,
+        rgba(0,0,0,.7) 80px 130px, transparent 130px 170px,
+        rgba(0,0,0,.9) 170px 240px, transparent 240px 280px);
+    mask:linear-gradient(180deg, transparent 0%, black 40%);
+  }
+  /* moon disk */
+  .lorehero .moon{
+    position:absolute;top:18%;right:14%;width:160px;height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(247,37,133,.7), rgba(183,9,76,.4) 60%, transparent 80%);
+    box-shadow:0 0 80px rgba(247,37,133,.35);
+    filter:blur(.5px);
+  }
+  .lorehero .moon::after{
+    content:"";position:absolute;inset:-30px;border:1px dashed rgba(247,37,133,.3);border-radius:50%;
+    animation:rotate 30s linear infinite;
+  }
+  .lorehero .scanlines{
+    position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(to bottom, transparent 0 3px, rgba(0,0,0,.15) 3px 4px);
+    mix-blend-mode:overlay;
+  }
+  .lorehero .vignette{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 50%, var(--bg-0) 100%);
+    pointer-events:none;
+  }
+
+  .lorehero .topbar{
+    position:absolute;top:30px;left:36px;right:36px;display:flex;justify-content:space-between;z-index:3;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+  }
+  .lorehero .topbar b{color:var(--cyan)}
+
+  .lorehero .stack{
+    position:absolute;left:36px;bottom:60px;right:36px;z-index:3;max-width:900px;
+  }
+  .lorehero .stack .eyebrow{margin-bottom:22px;display:block}
+  .lorehero h1{
+    margin:0;font-family:var(--f-display);font-weight:700;
+    font-size:170px;line-height:.85;letter-spacing:-.025em;text-transform:uppercase;
+  }
+  .lorehero h1 .accent{color:var(--cyan)}
+  .lorehero p.lede{margin-top:28px;font-size:20px;max-width:60ch;color:var(--t-1)}
+
+  /* SNAPSHOT */
+  .snapshot{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--b-2);background:var(--bg-2);
+    margin-bottom:120px;
+  }
+  .snapshot > div{
+    padding:30px 32px;border-right:1px solid var(--b-2);
+    display:flex;flex-direction:column;gap:8px;position:relative;
+  }
+  .snapshot > div:last-child{border-right:none}
+  .snapshot > div::before{
+    content:"";position:absolute;top:0;left:0;width:32px;height:1px;background:var(--cyan);
+  }
+  .snapshot small{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--t-3)}
+  .snapshot b{font-family:var(--f-display);font-weight:700;font-size:48px;line-height:1;letter-spacing:-.02em;color:var(--t-1)}
+  .snapshot span{font-family:var(--f-body);font-size:13px;color:var(--t-3)}
+
+  /* MISSION */
+  .missions{margin-bottom:120px;position:relative}
+  .missions .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .mission{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    padding:36px 36px 32px;display:flex;flex-direction:column;gap:14px;
+    min-height:300px;position:relative;overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .mission:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .mission::before{
+    content:attr(data-num);position:absolute;top:14px;right:24px;
+    font-family:var(--f-display);font-size:120px;font-weight:700;color:rgba(76,201,240,.06);
+    line-height:.8;letter-spacing:-.04em;pointer-events:none;
+  }
+  .mission .tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);position:relative;z-index:1}
+  .mission h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:38px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;position:relative;z-index:1;
+  }
+  .mission h3 .accent{color:var(--cyan)}
+  .mission p{margin:0;color:var(--t-2);line-height:1.55;max-width:44ch;position:relative;z-index:1}
+  .mission .quote{
+    margin-top:auto;padding-top:18px;border-top:1px solid var(--b-1);
+    font-family:var(--f-display);font-style:italic;font-size:17px;color:var(--cyan);position:relative;z-index:1;
+  }
+  .mission .quote small{
+    display:block;margin-top:6px;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-4);font-style:normal;
+  }
+
+  /* ===== FADING SCROLL TIMELINE ===== */
+  .timelinewrap{
+    margin:0 -36px 120px;padding:120px 36px;
+    position:relative;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(76,201,240,.06), transparent 60%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 50%, var(--bg-0));
+    border-top:1px solid var(--b-2);border-bottom:1px solid var(--b-2);
+  }
+  .timelinewrap::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask:radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%);
+  }
+  .timelinewrap .inner{max-width:1248px;margin:0 auto;position:relative;z-index:1}
+  .timelinewrap .head{text-align:center;margin-bottom:60px}
+  .timelinewrap .head .eyebrow{display:block;margin-bottom:14px}
+  .timelinewrap .head h2{
+    margin:0 0 18px;font-family:var(--f-display);font-weight:700;
+    font-size:80px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;
+  }
+  .timelinewrap .head h2 .accent{color:var(--cyan)}
+  .timelinewrap .head p{max-width:54ch;margin:0 auto;color:var(--t-2)}
+
+  .timeline{position:relative;padding:60px 0}
+  .timeline::before{
+    /* center rail */
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;
+    background:linear-gradient(to bottom, transparent 0%, var(--cyan) 8%, var(--cyan) 92%, transparent 100%);
+    transform:translateX(-50%);
+    box-shadow:0 0 18px var(--cyan-g);
+  }
+
+  .milestone{
+    position:relative;width:46%;
+    padding:28px 32px;
+    background:rgba(17,20,31,.85);
+    border:1px solid var(--b-2);
+    backdrop-filter:blur(8px);
+    margin-bottom:90px;
+    opacity:0;transform:translateY(20px);
+    transition:opacity .15s linear, transform .15s linear, border-color .2s ease;
+    clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  }
+  .milestone:hover{border-color:var(--cyan)}
+  .milestone.left{margin-right:auto}
+  .milestone.right{margin-left:auto}
+  .milestone .label{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--t-3);margin-bottom:8px;display:block;
+  }
+  .milestone .yr{
+    font-family:var(--f-display);font-weight:700;font-size:64px;line-height:.9;
+    letter-spacing:-.02em;color:var(--cyan);margin-bottom:10px;
+    text-shadow:0 0 24px var(--cyan-g);
+  }
+  .milestone h3{
+    margin:0 0 12px;font-family:var(--f-display);font-weight:700;
+    font-size:28px;line-height:1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .milestone p{margin:0;color:var(--t-2);font-size:14px;line-height:1.55;max-width:44ch}
+
+  /* connector dot on rail */
+  .milestone::after{
+    content:"";position:absolute;top:40px;width:14px;height:14px;
+    border:2px solid var(--cyan);background:var(--bg-0);border-radius:50%;
+    box-shadow:0 0 0 4px var(--bg-0), 0 0 20px var(--cyan-g);
+    z-index:2;
+  }
+  .milestone.left::after{right:-8.7%;transform:translateX(50%)}
+  .milestone.right::after{left:-8.7%;transform:translateX(-50%)}
+  /* connector line */
+  .milestone::before{
+    content:"";position:absolute;top:46px;height:1px;
+    background:linear-gradient(to right, var(--cyan), transparent);
+  }
+  .milestone.left::before{
+    right:-8.7%;width:8.7%;
+    background:linear-gradient(to left, var(--cyan), transparent);
+  }
+  .milestone.right::before{left:-8.7%;width:8.7%}
+
+  /* now state */
+  .milestone.now{
+    background:linear-gradient(135deg, rgba(183,9,76,.25), rgba(247,37,133,.10));
+    border-color:var(--crimson);
+  }
+  .milestone.now .yr{color:#fff;text-shadow:0 0 30px var(--crimson-g)}
+  .milestone.now::after{
+    border-color:var(--crimson);background:var(--crimson);
+    box-shadow:0 0 0 4px var(--bg-0), 0 0 0 6px var(--crimson), 0 0 24px var(--crimson-g);
+  }
+  .milestone.now::before{background:linear-gradient(to left, var(--crimson), transparent)}
+
+  /* scrubber on right edge */
+  .scrubber{
+    position:absolute;top:80px;bottom:80px;right:0;width:2px;
+    background:rgba(255,255,255,.06);
+  }
+  .scrubber .fill{
+    position:absolute;top:0;width:100%;background:linear-gradient(to bottom, var(--cyan), var(--crimson));
+    height:0%;box-shadow:0 0 12px var(--cyan-g);
+  }
+  .scrubber .tick{
+    position:absolute;left:-8px;width:14px;height:1px;background:rgba(255,255,255,.2);
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;color:var(--t-4);
+  }
+  .scrubber .tick span{position:absolute;left:20px;top:-6px;white-space:nowrap}
+
+  /* endcap */
+  .endcap{
+    text-align:center;margin-top:-30px;
+    opacity:0;transition:opacity .3s linear;
+  }
+  .endcap.show{opacity:1}
+  .endcap i{
+    display:inline-block;width:12px;height:12px;border:1.5px solid var(--cyan);
+    transform:rotate(45deg);margin-bottom:14px;
+    box-shadow:0 0 12px var(--cyan-g);
+  }
+  .endcap p{margin:0;font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--t-3)}
+
+  /* ===== FACTIONS ===== */
+  .factions{margin-bottom:120px}
+  .factions .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .faction{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:grid;grid-template-columns:160px 1fr;
+    transition:border-color .2s ease;
+    overflow:hidden;
+  }
+  .faction:hover{border-color:var(--cyan)}
+  .faction .crest{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    border-right:1px solid var(--b-2);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(76,201,240,.10), transparent 70%),
+      linear-gradient(135deg, var(--bg-3), var(--bg-1));
+    font-family:var(--f-display);font-weight:700;font-size:48px;
+    color:var(--cyan);text-shadow:0 0 20px var(--cyan-g);
+    letter-spacing:.02em;
+  }
+  .faction .crest::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:20px 20px;
+  }
+  .faction.hostile .crest{color:var(--crimson);text-shadow:0 0 20px var(--crimson-g);background:radial-gradient(circle at 50% 50%, rgba(183,9,76,.12), transparent 70%), linear-gradient(135deg, var(--bg-3), var(--bg-1))}
+  .faction .body{padding:24px 28px;display:flex;flex-direction:column;gap:10px}
+  .faction .meta{display:flex;gap:18px;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3)}
+  .faction .meta b{color:var(--t-1)}
+  .faction h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .faction p{margin:0;color:var(--t-2);font-size:14px;line-height:1.5;max-width:40ch}
+  .faction .stance{
+    margin-top:auto;padding-top:12px;border-top:1px solid var(--b-1);
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);
+  }
+  .faction .stance .ally{color:var(--green)}
+  .faction .stance .neutral{color:var(--amber)}
+  .faction .stance .hostile{color:var(--crimson)}
+
+  /* ===== LOCATIONS ===== */
+  .places{margin-bottom:80px}
+  .places .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .place{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:flex;flex-direction:column;cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .place:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .place .ph{
+    height:240px;border:none;border-bottom:1px solid var(--b-2);
+  }
+  .place .body{padding:24px 26px;display:flex;flex-direction:column;gap:10px}
+  .place .coord{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
+  .place h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .place p{margin:0;color:var(--t-2);font-size:14px;line-height:1.5}
+  .place .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .place .tags span{padding:3px 8px;border:1px solid var(--b-2);font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-2)}
+
+  .places .endgame{
+    margin-top:22px;
+    background:linear-gradient(135deg, rgba(183,9,76,.16), rgba(76,201,240,.08));
+    border:1px dashed var(--crimson);
+    padding:36px 38px;display:flex;align-items:center;justify-content:space-between;gap:30px;
+    clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  }
+  .places .endgame .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--crimson)}
+  .places .endgame h3{
+    margin:8px 0 6px;font-family:var(--f-display);font-weight:700;font-size:36px;line-height:1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .places .endgame p{margin:0;color:var(--t-2);max-width:60ch;font-size:14px;line-height:1.5}
+
+  /* ===== MANIFESTO ===== */
+  .manifesto{
+    margin:80px -36px 0;padding:140px 36px;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(76,201,240,.08), transparent 60%),
+      var(--bg-1);
+    border-top:1px solid var(--b-2);border-bottom:1px solid var(--b-2);
+    position:relative;overflow:hidden;
+  }
+  .manifesto::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:64px 64px;
+  }
+  .manifesto .inner{max-width:980px;margin:0 auto;text-align:center;position:relative;z-index:1}
+  .manifesto .mark{
+    width:48px;height:48px;border:1.5px solid var(--cyan);
+    transform:rotate(45deg);margin:0 auto 30px;
+    box-shadow:0 0 30px var(--cyan-g);
+    background:rgba(76,201,240,.06);
+  }
+  .manifesto .quote{
+    font-family:var(--f-display);font-weight:700;font-style:italic;
+    font-size:64px;line-height:1.05;letter-spacing:-.015em;
+    margin:0 0 30px;color:var(--t-1);
+  }
+  .manifesto .quote .accent{color:var(--cyan)}
+  .manifesto .by{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--t-3);
+  }
+  .manifesto .by b{color:var(--cyan)}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="Home.html" class="brand"><i></i>Vaportrails<span class="accent">// vpr.trl</span></a>
+  <ul class="links">
+    <li><a href="Home.html">Home</a></li>
+    <li><a href="Lore.html" class="current">About</a></li>
+    <li><a href="News.html">News</a></li>
+    <li><a href="Lore.html" class="current">Lore</a></li>
+    <li><a href="Community.html">Community</a></li>
+  </ul>
+  <div class="actions">
+    <span class="lang">EN ▾</span>
+    <a class="btn sm" href="#">Sign in</a>
+    <a class="btn primary sm" href="#play">▶ Play</a>
+  </div>
+</nav>
+
+<div class="page" style="padding-top:0">
+
+  <!-- HERO -->
+  <section class="lorehero">
+    <div class="moon"></div>
+    <div class="silhouette"></div>
+    <div class="vignette"></div>
+    <div class="scanlines"></div>
+
+    <div class="topbar">
+      <span>// dossier · 04-A · neon east</span>
+      <span>frequency open · <b>0.7.3</b> ● <b>RECORDED</b></span>
+    </div>
+
+    <div class="stack">
+      <span class="eyebrow">// the world of vaportrails</span>
+      <h1>It started<br>with a <span class="accent">glitch</span>.</h1>
+      <p class="lede">Earth, 2099. The grid is older than anyone remembers and still hungry. The streets are wet, the sky is a screen, and a small underground of riders carries data between districts the algorithm forgot. This is where Vaportrails takes place.</p>
+    </div>
+  </section>
+
+  <!-- SNAPSHOT -->
+  <section class="snapshot">
+    <div><small>// setting</small><b>2099</b><span>13 years after the Outage</span></div>
+    <div><small>// region</small><b>Neon East</b><span>Pacific archipelago · district 04</span></div>
+    <div><small>// population</small><b>42 M</b><span>recorded · the rest run dark</span></div>
+    <div><small>// grid status</small><b style="color:var(--crimson)">Unstable</b><span>nightly brownouts since 2096</span></div>
+  </section>
+
+  <!-- MISSIONS -->
+  <section class="missions">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 02 · what we're making</span>
+        <h2>Studio <span class="accent">mission</span>.</h2>
+      </div>
+      <div style="font-size:14px;color:var(--t-3);max-width:42ch;text-align:right;line-height:1.5">Four rules we keep above the door at the studio. Every meeting checks against them.</div>
+    </div>
+
+    <div class="grid">
+      <article class="mission" data-num="01">
+        <span class="tag">// pillar · feel</span>
+        <h3>Style is a <span class="accent">vital sign</span>.</h3>
+        <p>Movement carries personality. If a player can't tell from twelve frames of footage that someone is good, we failed. Every system bends toward expression first, optimization second.</p>
+        <div class="quote">"if it looks cool, it works."<small>— studio rule #1</small></div>
+      </article>
+
+      <article class="mission" data-num="02">
+        <span class="tag">// pillar · world</span>
+        <h3>The grid is a <span class="accent">character</span>.</h3>
+        <p>The city is the third player in every match. Weather changes routes. Brownouts close highways. The neon district remembers what happened there last week. The world should never feel like wallpaper.</p>
+        <div class="quote">"the map has a mood."<small>— studio rule #2</small></div>
+      </article>
+
+      <article class="mission" data-num="03">
+        <span class="tag">// pillar · signature</span>
+        <h3>Trails are <span class="accent">signatures</span>.</h3>
+        <p>Every action leaves something visible. Decals, vapor, scorch marks, scratched paint — they all persist. Other players see your record before they meet you. The game writes you down.</p>
+        <div class="quote">"never erase the player."<small>— studio rule #3</small></div>
+      </article>
+
+      <article class="mission" data-num="04">
+        <span class="tag">// pillar · community</span>
+        <h3>Underground over <span class="accent">algorithm</span>.</h3>
+        <p>Discovery happens through people, not feeds. We hide leaderboards behind reputation, route discovery through guides, and surface community content over engagement metrics. Slow burn over hype loop.</p>
+        <div class="quote">"build worth haunting."<small>— studio rule #4</small></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ FADING SCROLL TIMELINE ============ -->
+  <section class="timelinewrap" id="timeline">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow">// section 03 · how we got here</span>
+        <h2>Thirteen years<br>of <span class="accent">trouble</span>.</h2>
+        <p class="lede">Scroll through. Each milestone surfaces as it enters the frame and fades when it passes. The grid only shows you what you're looking at.</p>
+      </div>
+
+      <div class="timeline" id="timeline-track">
+        <div class="scrubber" id="scrubber">
+          <div class="fill" id="scrubber-fill"></div>
+          <div class="tick" style="top:0%"><span>2086</span></div>
+          <div class="tick" style="top:25%"><span>2092</span></div>
+          <div class="tick" style="top:50%"><span>2094</span></div>
+          <div class="tick" style="top:75%"><span>2097</span></div>
+          <div class="tick" style="top:100%"><span>2099 / NOW</span></div>
+        </div>
+
+        <article class="milestone left">
+          <span class="label">// 03 · 18 · 2086 · record A-0001</span>
+          <div class="yr">2086</div>
+          <h3>First neon bloom.</h3>
+          <p>Neon East's grid is brought online by a consortium of three corporations. Promotional film shows two children chasing a holographic koi through a rain-slick alley. The film loops on every public screen for 14 years.</p>
+        </article>
+
+        <article class="milestone right">
+          <span class="label">// 11 · 02 · 2089 · record A-0117</span>
+          <div class="yr">2089</div>
+          <h3>The Outage.</h3>
+          <p>Without warning, the entire analog backbone of the eastern grid drops for 38 hours. No one claims responsibility. A new black-market communication standard called "trail" emerges in the dark, written on motorbike-mounted antennas.</p>
+        </article>
+
+        <article class="milestone left">
+          <span class="label">// 07 · 14 · 2092 · record A-0421</span>
+          <div class="yr">2092</div>
+          <h3>Crash year.</h3>
+          <p>Two of the three founding corps fold inside the same quarter. Neon East fragments into seven autonomous districts overnight. Half the population learns to read by brownout-light. The first courier gangs form to move data physically.</p>
+        </article>
+
+        <article class="milestone right">
+          <span class="label">// 02 · 22 · 2094 · record B-0014</span>
+          <div class="yr">2094</div>
+          <h3>Vapor underground forms.</h3>
+          <p>A loose collective of couriers, mechanics, and pirate broadcasters agree on a single shared protocol: leave a trail. Mark every route. Help the next rider through. By the end of the year, "vapor" is slang for the whole network.</p>
+        </article>
+
+        <article class="milestone left">
+          <span class="label">// 09 · 09 · 2096 · record C-0001</span>
+          <div class="yr">2096</div>
+          <h3>The first trail run.</h3>
+          <p>A 23-year-old courier named Hex carries an encrypted package from Spire 12 to the outer ring in 4 minutes 11 seconds — faster than the official grid could route a signal that night. The run is anonymously livestreamed. The legend starts here.</p>
+        </article>
+
+        <article class="milestone right">
+          <span class="label">// 04 · 30 · 2097 · record S-0001</span>
+          <div class="yr">2097</div>
+          <h3>Project Vaportrails begins.</h3>
+          <p>The studio is founded by three ex-couriers and a former audio engineer. They rent a garage above a soba shop in Neon East. Goal: make a game that captures the feel of running a trail, without anyone having to actually break a leg.</p>
+        </article>
+
+        <article class="milestone left">
+          <span class="label">// 12 · 12 · 2098 · record S-0418</span>
+          <div class="yr">2098</div>
+          <h3>Beta network goes live.</h3>
+          <p>Closed beta to 800 couriers. Server crashes in 11 minutes. Server crashes 14 more times that night. By morning, every player has signed the NDA in blood (figuratively) and asked when the next test is.</p>
+        </article>
+
+        <article class="milestone right now">
+          <span class="label" style="color:#fff;opacity:.7">// 05 · 12 · 2099 · YOU ARE HERE</span>
+          <div class="yr">2099</div>
+          <h3 style="color:#fff">You arrive.</h3>
+          <p style="color:rgba(255,255,255,.85)">The grid is unstable. The bureau is watching. The trail is wide open. The garage is hiring. Pick your chassis, register a handle, and burn out. Welcome to Vaportrails.</p>
+        </article>
+
+        <div class="endcap" id="endcap">
+          <i></i>
+          <p>End of transmission · scroll up to rewind</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACTIONS -->
+  <section class="factions">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 04 · who's in the field</span>
+        <h2>Four factions, one <span class="accent">frequency</span>.</h2>
+      </div>
+      <a class="btn cyan sm" href="#">Full dossier <span class="glyph">→</span></a>
+    </div>
+
+    <div class="grid">
+      <article class="faction">
+        <div class="crest">G·C</div>
+        <div class="body">
+          <div class="meta"><span>founded <b>2090</b></span><span>~<b>4k</b> members</span><span>tag <b>chaos</b></span></div>
+          <h3>The Glitch Cult.</h3>
+          <p>Anarchist artists who tag the grid with running code. They consider the city a canvas and the bureau their patron. Friendly to riders who don't snitch.</p>
+          <div class="stance">stance · <span class="ally">chaotic ally</span></div>
+        </div>
+      </article>
+
+      <article class="faction hostile">
+        <div class="crest">N·B</div>
+        <div class="body">
+          <div class="meta"><span>founded <b>2068</b></span><span>members <b>classified</b></span><span>tag <b>corp</b></span></div>
+          <h3>Neon Bureau.</h3>
+          <p>The last remaining corporate enforcement arm. Wear a lot of gold. Patrol the gridlight corridors. Bribe before fight, but they always remember a face.</p>
+          <div class="stance">stance · <span class="hostile">hostile</span></div>
+        </div>
+      </article>
+
+      <article class="faction">
+        <div class="crest">T·W</div>
+        <div class="body">
+          <div class="meta"><span>founded <b>2092</b></span><span>members <b>unknown</b></span><span>tag <b>courier</b></span></div>
+          <h3>Trail Walkers.</h3>
+          <p>Anonymous courier network. No leaders, no logo, only protocols. If you know the right whistle at the right wall, a Walker will move anything for you. Once.</p>
+          <div class="stance">stance · <span class="neutral">neutral</span></div>
+        </div>
+      </article>
+
+      <article class="faction">
+        <div class="crest">S·F</div>
+        <div class="body">
+          <div class="meta"><span>founded <b>2094</b></span><span>~<b>900</b> members</span><span>tag <b>music</b></span></div>
+          <h3>Sub-Frequency.</h3>
+          <p>Pirate radio collective. Run the underground music scene. Throw illegal raves in drained pools. They'll boost your trail's signal if you boost theirs.</p>
+          <div class="stance">stance · <span class="ally">friendly</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- LOCATIONS -->
+  <section class="places">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 05 · where it happens</span>
+        <h2>Four districts to <span class="accent">outrun</span>.</h2>
+      </div>
+      <a class="btn sm" href="#">Open the map <span class="glyph">⛶</span></a>
+    </div>
+
+    <div class="grid">
+      <article class="place">
+        <div class="ph" style="height:240px">
+          <div class="corners"><i></i></div>
+          <div class="lbl">// 04 · NEON EAST · HUB</div>
+        </div>
+        <div class="body">
+          <div class="coord">// 35.6N 139.7E · district 04</div>
+          <h3>Neon East.</h3>
+          <p>Where you're starting. Wet streets, holographic koi, a soba shop above your garage. The grid here is loudest, the bureau thickest.</p>
+          <div class="tags"><span>HUB</span><span>TUTORIAL</span><span>BUREAU</span></div>
+        </div>
+      </article>
+
+      <article class="place">
+        <div class="ph" style="height:240px;background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.4), #060810);">
+          <div class="corners"><i></i></div>
+          <div class="lbl">// −2 · SUBSTRATE · DARK</div>
+        </div>
+        <div class="body">
+          <div class="coord">// sublvl −2 · subliminal · DARK</div>
+          <h3>The Substrate.</h3>
+          <p>The tunnels under everything. Drained subway, server farms, lost neon. The grid can't see down here. Walkers know the way; nobody else does.</p>
+          <div class="tags"><span>DARK</span><span>NO-GRID</span><span>WALKERS</span></div>
+        </div>
+      </article>
+
+      <article class="place">
+        <div class="ph" style="height:240px;background:radial-gradient(ellipse 40% 100% at 50% 100%, rgba(76,201,240,.25), transparent 70%), linear-gradient(180deg, #11142a, #0a0c14);">
+          <div class="corners"><i></i></div>
+          <div class="lbl">// 412M · SPIRE 12 · VERTICAL</div>
+        </div>
+        <div class="body">
+          <div class="coord">// 412m elevation · vertical run</div>
+          <h3>Spire 12.</h3>
+          <p>The last functioning corp tower. 412m of glass, lights, helipads. Bureau HQ at the top. Climb it if you must; the elevators don't take riders.</p>
+          <div class="tags"><span>VERTICAL</span><span>BUREAU</span><span>HEIST</span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="endgame">
+      <div>
+        <div class="tag">// 04 · outer ring · endgame zone</div>
+        <h3>The Outer Ring.</h3>
+        <p>The badlands beyond the grid. Highways without lights, weather without forecast. Endgame zone — bring a chassis you don't mind losing.</p>
+      </div>
+      <a class="btn primary" href="#">Endgame brief <span class="glyph">→</span></a>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <div class="inner">
+      <div class="mark"></div>
+      <p class="quote">"The trail is the <span class="accent">message</span>.<br>If you can read it, you're in."</p>
+      <div class="by">— Hex / first courier · <b>signal recovered 2096</b></div>
+    </div>
+  </section>
+
+  <!-- BIG CTA -->
+  <section class="section" id="play">
+    <div class="bigcta">
+      <div>
+        <span class="eyebrow">// pick a chassis · register a handle</span>
+        <h2 style="margin-top:18px">Leave a<br><span class="accent">trail</span>.</h2>
+      </div>
+      <div class="meta">
+        <span class="sub">/ free · browser build</span>
+        <a class="btn primary lg" href="#"><span class="glyph">▶</span> Enter the grid</a>
+        <span class="sub" style="opacity:.6">no install · ~80mb</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <div class="brand-block">
+      <span class="brand"><i></i>Vaportrails</span>
+      <p>Neon drift. Underground network. 2099. A small studio above a soba shop in Neon East.</p>
+      <div class="socials"><span>X</span><span>YT</span><span>DC</span><span>TW</span><span>IG</span></div>
+    </div>
+    <div class="col"><h4>Game</h4><ul><li><a href="Home.html">Play</a></li><li><a href="#">Features</a></li><li><a href="#">System reqs</a></li><li><a href="#">Roadmap</a></li></ul></div>
+    <div class="col"><h4>World</h4><ul><li><a href="Lore.html">Lore</a></li><li><a href="Lore.html">Characters</a></li><li><a href="#">Map</a></li><li><a href="#">Soundtrack</a></li></ul></div>
+    <div class="col"><h4>Studio</h4><ul><li><a href="Lore.html">About</a></li><li><a href="News.html">News</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div class="bottom">
+      <span>© 2099 VAPORTRAILS / All glitches reserved</span>
+      <span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">EULA</a></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Nav scroll behavior
+  (function(){
+    const nav = document.getElementById('nav');
+    function update(){
+      if(window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+
+  // FADING SCROLL TIMELINE
+  (function(){
+    const milestones = Array.from(document.querySelectorAll('.milestone'));
+    const fill       = document.getElementById('scrubber-fill');
+    const endcap     = document.getElementById('endcap');
+    const track      = document.getElementById('timeline-track');
+    if(!milestones.length) return;
+
+    let raf = null;
+    function update(){
+      raf = null;
+      const vh = window.innerHeight;
+      const viewCenter = vh / 2;
+
+      const fullRange = vh * 0.30;
+      const fadeRange = vh * 0.28;
+
+      milestones.forEach(m => {
+        const r = m.getBoundingClientRect();
+        const c = r.top + r.height/2;
+        const dist = Math.abs(c - viewCenter);
+        let opacity;
+        if(dist <= fullRange){ opacity = 1; }
+        else { opacity = Math.max(0, 1 - (dist - fullRange) / fadeRange); }
+        m.style.opacity = opacity.toFixed(3);
+        const offset = (1 - opacity) * (c < viewCenter ? -14 : 14);
+        m.style.transform = `translateY(${offset}px)`;
+      });
+
+      const tr = track.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, (viewCenter - tr.top) / tr.height));
+      fill.style.height = (progress * 100).toFixed(1) + '%';
+
+      const last = milestones[milestones.length - 1].getBoundingClientRect();
+      const lastCenter = last.top + last.height/2;
+      if(lastCenter < viewCenter - 20) endcap.classList.add('show');
+      else endcap.classList.remove('show');
+    }
+    function schedule(){ if(raf == null) raf = requestAnimationFrame(update); }
+    window.addEventListener('scroll', schedule, {passive:true});
+    window.addEventListener('resize', schedule);
+    update();
+  })();
+</script>
+</body>
+</html>

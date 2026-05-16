@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Vaportrails — Community · The Network</title>
+<meta name="viewport" content="width=1320" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============ COMMUNITY ============ */
+
+  .pagehead{padding:120px 0 50px;border-bottom:1px solid var(--b-2);position:relative}
+  .pagehead .eyebrow{margin-bottom:16px;display:block}
+  .pagehead h1{
+    margin:0;font-family:var(--f-display);font-weight:700;
+    font-size:140px;line-height:.88;letter-spacing:-.025em;text-transform:uppercase;
+  }
+  .pagehead h1 .accent{color:var(--cyan)}
+  .pagehead .lede{margin:30px 0 0;color:var(--t-2);max-width:60ch;font-size:18px}
+  .pagehead .stats{
+    margin-top:40px;display:flex;gap:60px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+  }
+  .pagehead .stats b{display:block;font-family:var(--f-display);font-size:24px;color:var(--cyan);letter-spacing:.02em;margin-top:4px;font-weight:600}
+
+  /* LIVE TICKER */
+  .ticker{
+    margin:40px 0 80px;
+    border:1px solid var(--crimson);
+    background:linear-gradient(90deg, rgba(183,9,76,.2), rgba(183,9,76,.05));
+    display:flex;align-items:stretch;overflow:hidden;
+    box-shadow:0 0 30px -10px var(--crimson-g);
+  }
+  .ticker .label{
+    background:var(--crimson);padding:16px 22px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:#fff;
+    display:flex;align-items:center;gap:10px;
+    border-right:1px solid var(--crimson);
+  }
+  .ticker .label .dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:pulse-rc 1.4s ease-in-out infinite}
+  @keyframes pulse-rc{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{opacity:.4;box-shadow:0 0 0 6px rgba(255,255,255,0)}}
+  .ticker .scroll{
+    flex:1;display:flex;align-items:center;gap:36px;padding:0 22px;overflow:hidden;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--t-2);white-space:nowrap;
+  }
+  .ticker .scroll .line{
+    display:inline-flex;gap:36px;animation:marquee 60s linear infinite;
+  }
+  .ticker .scroll .line span{display:inline-flex;align-items:center;gap:10px}
+  .ticker .scroll .line b{color:var(--cyan);font-weight:600}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ticker .count{
+    border-left:1px solid var(--crimson);padding:16px 22px;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+    display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:140px;
+  }
+  .ticker .count b{font-family:var(--f-display);font-size:22px;color:#fff;letter-spacing:.02em;font-weight:600}
+
+  /* STATS ROW */
+  .statrow{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--b-2);background:var(--bg-2);
+    margin-bottom:120px;
+  }
+  .statrow > div{
+    padding:30px 32px;border-right:1px solid var(--b-2);
+    display:flex;flex-direction:column;gap:6px;position:relative;
+  }
+  .statrow > div::before{content:"";position:absolute;top:0;left:0;width:32px;height:1px;background:var(--cyan)}
+  .statrow > div:last-child{border-right:none}
+  .statrow small{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--t-3)}
+  .statrow b{font-family:var(--f-display);font-weight:700;font-size:42px;line-height:1;letter-spacing:-.02em;color:var(--t-1)}
+  .statrow span{font-family:var(--f-body);font-size:13px;color:var(--t-3)}
+  .statrow .delta{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:600;margin-top:4px}
+
+  /* PLATFORMS */
+  .platforms{margin-bottom:120px}
+  .platforms .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .platform{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    padding:32px;display:flex;flex-direction:column;gap:18px;min-height:280px;position:relative;overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .platform:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .platform .top{display:flex;align-items:center;justify-content:space-between}
+  .platform .glyph{
+    width:56px;height:56px;border:1px solid var(--cyan);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--f-display);font-size:22px;font-weight:700;color:var(--cyan);letter-spacing:.04em;
+    background:rgba(76,201,240,.08);
+    box-shadow:0 0 20px -8px var(--cyan-g);
+  }
+  .platform h3{
+    margin:6px 0 0;font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .platform p{margin:0;color:var(--t-2);line-height:1.5;font-size:14px}
+  .platform .ftr{
+    margin-top:auto;padding-top:14px;border-top:1px solid var(--b-1);
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);
+  }
+  .platform .ftr b{color:var(--t-1);font-family:var(--f-display);font-size:18px;font-weight:600;letter-spacing:.02em}
+  .platform .ftr .arr{color:var(--cyan)}
+
+  /* CREATORS */
+  .creators{margin-bottom:120px}
+  .creators .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .creator{
+    background:var(--bg-2);border:1px solid var(--b-1);
+    display:flex;flex-direction:column;cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .creator:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .creator .ph{
+    height:200px;border:none;border-bottom:1px solid var(--b-2);position:relative;
+    background:
+      radial-gradient(circle at 50% 60%, rgba(76,201,240,.18), transparent 60%),
+      linear-gradient(135deg, #181c2a, #0a0c14);
+  }
+  .creator .ph::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:24px 24px;
+  }
+  .creator .ph .live-badge{
+    position:absolute;top:10px;left:10px;
+    padding:5px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+    background:var(--crimson);color:#fff;display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 0 14px -2px var(--crimson-g);
+  }
+  .creator .ph .live-badge i{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse-rc 1.4s ease-in-out infinite}
+  .creator .ph .viewers{
+    position:absolute;bottom:10px;right:10px;
+    padding:4px 8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    background:rgba(0,0,0,.7);color:var(--t-1);backdrop-filter:blur(6px);border:1px solid var(--b-2);
+  }
+  .creator .body{padding:16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .creator .top{display:flex;align-items:center;gap:10px}
+  .creator .av{width:40px;height:40px;background:radial-gradient(circle at 30% 30%, var(--cyan-g), var(--bg-3));border:1px solid var(--b-2);flex:none}
+  .creator h3{margin:0;font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1.1;letter-spacing:-.01em;text-transform:uppercase}
+  .creator .who{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);margin-top:2px}
+  .creator .ftr{margin-top:auto;padding-top:10px;border-top:1px solid var(--b-1);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-3)}
+  .creator .ftr b{color:var(--t-1);display:block;margin-top:2px;font-size:11px;letter-spacing:.04em}
+
+  /* TOURNAMENTS */
+  .tournaments{margin-bottom:120px}
+  .tour-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:22px}
+  .tour-feature{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:flex;flex-direction:column;
+    clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  }
+  .tour-feature .ph{height:320px;border:none;border-bottom:1px solid var(--b-2)}
+  .tour-feature .body{padding:32px 36px;display:flex;flex-direction:column;gap:18px}
+  .tour-feature .when{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--crimson);font-weight:600;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .tour-feature .when::before{content:"●";color:var(--crimson);animation:pulse-c 1.4s infinite}
+  .tour-feature h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:46px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .tour-feature h3 .accent{color:var(--cyan)}
+  .tour-feature p{margin:0;color:var(--t-2);line-height:1.55;font-size:15px;max-width:50ch}
+  .tour-feature .specs{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding-top:18px;border-top:1px solid var(--b-1);
+  }
+  .tour-feature .specs small{font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-4)}
+  .tour-feature .specs b{display:block;font-family:var(--f-display);font-size:18px;letter-spacing:.02em;color:var(--cyan);margin-top:3px;font-weight:600}
+  .tour-feature .ctas{display:flex;gap:10px;margin-top:6px}
+
+  .tour-list{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:flex;flex-direction:column;
+  }
+  .tour-list .h{
+    padding:20px 22px;border-bottom:1px solid var(--b-2);
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--t-3);
+  }
+  .tour-row{
+    padding:18px 22px;border-bottom:1px solid var(--b-1);
+    display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center;
+    transition:background .15s ease;
+  }
+  .tour-row:hover{background:rgba(255,255,255,.02)}
+  .tour-row:last-child{border-bottom:none}
+  .tour-row .date{font-family:var(--f-display);font-size:24px;font-weight:700;line-height:1;color:var(--cyan);letter-spacing:-.01em}
+  .tour-row .date small{display:block;font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-4);margin-top:4px;font-weight:400}
+  .tour-row .name{font-size:15px;line-height:1.2;color:var(--t-1)}
+  .tour-row .name small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);margin-top:4px}
+  .tour-row .badge{
+    border:1px solid var(--b-2);padding:5px 10px;
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-2);
+  }
+  .tour-row .badge.open{background:var(--cyan);color:var(--bg-0);border-color:var(--cyan);font-weight:600}
+  .tour-row .badge.done{color:var(--t-4);border-style:dashed}
+
+  /* GALLERY */
+  .gallery{margin-bottom:120px}
+  .gallery .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:160px;gap:14px}
+  .gcell{
+    background:
+      radial-gradient(circle at 50% 50%, rgba(76,201,240,.10), transparent 60%),
+      linear-gradient(135deg, #14182a, #0a0c14);
+    border:1px solid var(--b-1);
+    position:relative;cursor:pointer;
+    transition:border-color .2s, transform .2s;
+    overflow:hidden;
+  }
+  .gcell::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:24px 24px;
+  }
+  .gcell:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .gcell .info{
+    position:absolute;bottom:10px;left:10px;
+    padding:4px 8px;font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+    background:rgba(0,0,0,.6);color:var(--t-2);backdrop-filter:blur(6px);border:1px solid var(--b-2);
+  }
+  .gcell .info b{color:var(--cyan)}
+  .gcell.tall{grid-row:span 2}
+  .gcell.wide{grid-column:span 2}
+  .gcell.big{grid-column:span 2;grid-row:span 2}
+  .gcell.crimson{background:radial-gradient(circle at 50% 50%, rgba(247,37,133,.15), transparent 60%), linear-gradient(135deg, #1a0f1f, #0a0c14)}
+  .gcell.amber{background:radial-gradient(circle at 50% 50%, rgba(230,196,41,.10), transparent 60%), linear-gradient(135deg, #1a1814, #0a0c14)}
+
+  /* LEADERBOARDS */
+  .leaderboards{margin-bottom:120px}
+  .lb-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .lb{
+    background:var(--bg-2);border:1px solid var(--b-2);
+    display:flex;flex-direction:column;
+  }
+  .lb .h{
+    padding:22px 24px;border-bottom:1px solid var(--b-2);
+    display:flex;justify-content:space-between;align-items:flex-end;
+  }
+  .lb .h h3{
+    margin:0;font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1;
+    letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .lb .h small{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3)}
+  .lb .row{
+    display:grid;grid-template-columns:48px 40px 1fr auto;gap:14px;align-items:center;
+    padding:14px 24px;border-bottom:1px solid var(--b-1);
+    transition:background .15s ease;
+  }
+  .lb .row:last-child{border-bottom:none}
+  .lb .row:hover{background:rgba(255,255,255,.02)}
+  .lb .row.you{background:rgba(76,201,240,.06);border-color:rgba(76,201,240,.2)}
+  .lb .rank{font-family:var(--f-display);font-weight:700;font-size:22px;line-height:1;color:var(--t-2);letter-spacing:-.01em}
+  .lb .rank.top{color:var(--cyan);text-shadow:0 0 12px var(--cyan-g)}
+  .lb .av{width:32px;height:32px;background:radial-gradient(circle at 30% 30%, var(--cyan-g), var(--bg-3));border:1px solid var(--b-2)}
+  .lb .who{font-size:14px;line-height:1.2}
+  .lb .who small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3);margin-top:3px}
+  .lb .score{font-family:var(--f-mono);font-size:13px;letter-spacing:.04em;font-weight:600;text-align:right;color:var(--t-1)}
+  .lb .score small{display:block;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-4);font-weight:400;margin-top:2px}
+  .lb .score small.up{color:var(--green)}
+  .lb .score small.dn{color:var(--crimson)}
+
+  /* CREATOR CTA */
+  .creator-cta{
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(76,201,240,.12), transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(183,9,76,.12), transparent 60%),
+      var(--bg-2);
+    border:1px solid var(--b-2);
+    padding:60px 60px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+    margin-bottom:60px;position:relative;overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  }
+  .creator-cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask:linear-gradient(180deg, transparent, black 30%, black 70%, transparent);
+  }
+  .creator-cta .left{position:relative;z-index:1}
+  .creator-cta .left .eyebrow{display:block;margin-bottom:14px}
+  .creator-cta h2{margin:0 0 10px;font-family:var(--f-display);font-weight:700;font-size:48px;line-height:.95;letter-spacing:-.01em;text-transform:uppercase}
+  .creator-cta h2 .accent{color:var(--cyan)}
+  .creator-cta p{margin:0;color:var(--t-2);max-width:54ch;line-height:1.55}
+  .creator-cta .right{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+  .creator-cta .right .next{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-3)}
+  .creator-cta .right .next b{color:var(--cyan)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="Home.html" class="brand"><i></i>Vaportrails<span class="accent">// vpr.trl</span></a>
+  <ul class="links">
+    <li><a href="Home.html">Home</a></li>
+    <li><a href="Lore.html">About</a></li>
+    <li><a href="News.html">News</a></li>
+    <li><a href="Lore.html">Lore</a></li>
+    <li><a href="Community.html" class="current">Community</a></li>
+  </ul>
+  <div class="actions">
+    <span class="lang">EN ▾</span>
+    <a class="btn sm" href="#">Sign in</a>
+    <a class="btn primary sm" href="#play">▶ Play</a>
+  </div>
+</nav>
+
+<div class="page" style="padding-top:0">
+
+  <!-- HEADER -->
+  <header class="pagehead">
+    <span class="eyebrow">// section 05 · the network</span>
+    <h1>Join the <span class="accent">network</span>.</h1>
+    <p class="lede">Forty-two thousand riders. Twelve time zones. A frequency you can tune into wherever you are. Everything community lives here.</p>
+    <div class="stats">
+      <span>members<b>42,108</b></span>
+      <span>online<b>4,221</b></span>
+      <span>creators<b>318</b></span>
+      <span>monthly tourneys<b>14</b></span>
+    </div>
+  </header>
+
+  <!-- LIVE TICKER -->
+  <div class="ticker">
+    <div class="label"><span class="dot"></span>Live now</div>
+    <div class="scroll">
+      <div class="line">
+        <span><b>◉</b> 47 streams broadcasting</span>
+        <span><b>◉</b> Spire 12 climb · 4 racers entering final approach</span>
+        <span><b>◉</b> Midnight bracket · quarter-finals in 38 min</span>
+        <span><b>◉</b> Glitch Cult tag wave · Outer Ring</span>
+        <span><b>◉</b> Sub-frequency · pirate radio · 18.2k tuned in</span>
+        <!-- duplicate for seamless loop -->
+        <span><b>◉</b> 47 streams broadcasting</span>
+        <span><b>◉</b> Spire 12 climb · 4 racers entering final approach</span>
+        <span><b>◉</b> Midnight bracket · quarter-finals in 38 min</span>
+        <span><b>◉</b> Glitch Cult tag wave · Outer Ring</span>
+        <span><b>◉</b> Sub-frequency · pirate radio · 18.2k tuned in</span>
+      </div>
+    </div>
+    <div class="count">Online<b>4,221</b></div>
+  </div>
+
+  <!-- STAT ROW -->
+  <section class="statrow">
+    <div><small>// members</small><b>42.1k</b><span>since open beta</span><span class="delta">▲ +1,802 / week</span></div>
+    <div><small>// discord</small><b>28.4k</b><span>peak today: 4.7k</span><span class="delta">▲ +112 / day</span></div>
+    <div><small>// creators</small><b>318</b><span>verified · partner program</span><span class="delta">▲ +6 this month</span></div>
+    <div><small>// mod team</small><b>24</b><span>volunteers · 6 regions</span><span class="delta">covering 24/7</span></div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section class="platforms">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 01 · where we hang out</span>
+        <h2>Three places to <span class="accent">tune in</span>.</h2>
+      </div>
+      <div style="font-size:14px;color:var(--t-3);max-width:44ch;text-align:right;line-height:1.5">Pick the channel that suits you. They all share the same backbone — your handle works everywhere.</div>
+    </div>
+
+    <div class="grid">
+      <article class="platform">
+        <div class="top"><div class="glyph">DC</div><span class="live"><i></i>4,221 online</span></div>
+        <h3>Discord.</h3>
+        <p>The real-time channel. Trail runners, garage chatter, bug reports, tournament VC. Voice rooms staffed by mods 24/7.</p>
+        <div class="ftr"><b>28.4k members</b><span class="arr">Join →</span></div>
+      </article>
+
+      <article class="platform">
+        <div class="top"><div class="glyph">FM</div><span class="live"><i></i>312 reading</span></div>
+        <h3>Forum.</h3>
+        <p>Long-form. Build guides, route walkthroughs, lore theory, feedback threads. Search-friendly archive of every patch since 0.4.</p>
+        <div class="ftr"><b>12,408 threads</b><span class="arr">Browse →</span></div>
+      </article>
+
+      <article class="platform">
+        <div class="top"><div class="glyph">R/</div><span class="live"><i></i>always open</span></div>
+        <h3>r/Vaportrails.</h3>
+        <p>The street. Clips, memes, paint shares, "look at this trail," and the occasional pile-on. Lightly modded — riders run it.</p>
+        <div class="ftr"><b>34.2k subs</b><span class="arr">Visit →</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CREATORS -->
+  <section class="creators">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 02 · live now · featured creators</span>
+        <h2>Eyes on <span class="accent">the trail</span>.</h2>
+      </div>
+      <a class="btn cyan sm" href="#">See all 47 live <span class="glyph">→</span></a>
+    </div>
+
+    <div class="grid">
+      <article class="creator">
+        <div class="ph"><span class="live-badge"><i></i>Live</span><span class="viewers">1,204 watching</span></div>
+        <div class="body">
+          <div class="top"><div class="av"></div><div><h3>HexRunner</h3><div class="who">@hex.tx · jp</div></div></div>
+          <div class="ftr"><span>game<b>Vaportrails</b></span><span>lang<b>EN/JP</b></span></div>
+        </div>
+      </article>
+
+      <article class="creator">
+        <div class="ph"><span class="live-badge"><i></i>Live</span><span class="viewers">842 watching</span></div>
+        <div class="body">
+          <div class="top"><div class="av"></div><div><h3>Static.M</h3><div class="who">@static_m · us-w</div></div></div>
+          <div class="ftr"><span>build<b>Chassis tour</b></span><span>lang<b>EN</b></span></div>
+        </div>
+      </article>
+
+      <article class="creator">
+        <div class="ph"><span class="live-badge"><i></i>Live</span><span class="viewers">412 watching</span></div>
+        <div class="body">
+          <div class="top"><div class="av"></div><div><h3>Cinder</h3><div class="who">@cinder_fm · br</div></div></div>
+          <div class="ftr"><span>route<b>Spire 12</b></span><span>lang<b>PT</b></span></div>
+        </div>
+      </article>
+
+      <article class="creator">
+        <div class="ph"><span class="live-badge"><i></i>Live</span><span class="viewers">318 watching</span></div>
+        <div class="body">
+          <div class="top"><div class="av"></div><div><h3>Halo.K</h3><div class="who">@halo.k · de</div></div></div>
+          <div class="ftr"><span>mode<b>Ranked</b></span><span>lang<b>EN/DE</b></span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TOURNAMENTS -->
+  <section class="tournaments">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 03 · calendar</span>
+        <h2>Tournaments + <span class="accent">events</span>.</h2>
+      </div>
+      <a class="btn sm" href="#">Submit an event <span class="glyph">→</span></a>
+    </div>
+
+    <div class="tour-layout">
+      <article class="tour-feature">
+        <div class="ph" style="background:radial-gradient(ellipse at 50% 100%, rgba(183,9,76,.4), transparent 60%), linear-gradient(135deg, #14182a, #0a0c14)">
+          <div class="corners"><i></i></div>
+          <div class="lbl">// MIDNIGHT BRACKET · 14</div>
+        </div>
+        <div class="body">
+          <div class="when">Starts in 38 hours · May 17 — 19</div>
+          <h3>Midnight Bracket <span class="accent">#14</span>.</h3>
+          <p>72-hour single-elim across 12 regions. Custom decals, in-game cash, and the year's only real motorcycle prize. Open to all riders rank 4+.</p>
+          <div class="specs">
+            <div><small>format</small><b>Single elim</b></div>
+            <div><small>map pool</small><b>4 districts</b></div>
+            <div><small>slots</small><b>256/512</b></div>
+            <div><small>prize</small><b>15k + 🏍</b></div>
+          </div>
+          <div class="ctas">
+            <a class="btn primary" href="#">Register →</a>
+            <a class="btn" href="#">Bracket + rules <span class="glyph">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <aside class="tour-list">
+        <div class="h"><span>Upcoming + recent</span><span>this month</span></div>
+
+        <div class="tour-row">
+          <div class="date">17 MAY<small>FRI · 21:00</small></div>
+          <div class="name">Midnight Bracket #14<small>SINGLE ELIM · 256 SLOTS</small></div>
+          <div class="badge open">Register</div>
+        </div>
+        <div class="tour-row">
+          <div class="date">22 MAY<small>WED · 19:00</small></div>
+          <div class="name">Glitch Cult Tag Wave<small>OUTER RING · CASUAL</small></div>
+          <div class="badge open">Register</div>
+        </div>
+        <div class="tour-row">
+          <div class="date">29 MAY<small>WED · 20:00</small></div>
+          <div class="name">Substrate Speedrun Showcase<small>SOLO · LEADERBOARD</small></div>
+          <div class="badge">Soon</div>
+        </div>
+        <div class="tour-row">
+          <div class="date">04 JUN<small>TUE · 18:00</small></div>
+          <div class="name">Garage Wars #6 (decals)<small>VOTE-IN · COMMUNITY</small></div>
+          <div class="badge">Soon</div>
+        </div>
+        <div class="tour-row">
+          <div class="date">02 MAY<small>FRI · ENDED</small></div>
+          <div class="name">Spire 12 Climb · Open<small>RECAP + BRACKET ARCHIVE</small></div>
+          <div class="badge done">Recap →</div>
+        </div>
+        <div class="tour-row">
+          <div class="date">21 APR<small>SUN · ENDED</small></div>
+          <div class="name">Neon East Endurance 200<small>2-HOUR · TEAMS OF 4</small></div>
+          <div class="badge done">Recap →</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 04 · fan creations · this week</span>
+        <h2>From the <span class="accent">network</span>.</h2>
+      </div>
+      <a class="btn cyan sm" href="#">Submit yours <span class="glyph">→</span></a>
+    </div>
+
+    <div class="grid">
+      <div class="gcell big crimson"><div class="info"><b>@hex.tx</b> · ART · 218 likes</div></div>
+      <div class="gcell"><div class="info"><b>@cinder</b> · DECAL</div></div>
+      <div class="gcell"><div class="info"><b>@nova</b> · CLIP</div></div>
+      <div class="gcell tall amber"><div class="info"><b>@halo.k</b> · BUILD</div></div>
+      <div class="gcell"><div class="info"><b>@static</b> · ART</div></div>
+      <div class="gcell wide"><div class="info"><b>@m_park</b> · COMIC · 3 pages</div></div>
+      <div class="gcell"><div class="info"><b>@oki</b> · DECAL</div></div>
+      <div class="gcell"><div class="info"><b>@dust</b> · CLIP</div></div>
+      <div class="gcell wide crimson"><div class="info"><b>@trail.w</b> · ROUTE GUIDE</div></div>
+      <div class="gcell"><div class="info"><b>@cinder</b> · ART</div></div>
+      <div class="gcell"><div class="info"><b>@beat.r</b> · MUSIC</div></div>
+      <div class="gcell amber"><div class="info"><b>@ghost</b> · DECAL</div></div>
+      <div class="gcell"><div class="info"><b>@kira</b> · CLIP</div></div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARDS -->
+  <section class="leaderboards">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">// 05 · standings</span>
+        <h2>Top of <span class="accent">the trail</span>.</h2>
+      </div>
+      <div class="chips">
+        <span class="chip on">Weekly</span>
+        <span class="chip">All-time</span>
+        <span class="chip">Region</span>
+        <span class="chip">Friends</span>
+      </div>
+    </div>
+
+    <div class="lb-layout">
+      <article class="lb">
+        <div class="h"><h3>Trail time — global</h3><small>top 6 · week 19</small></div>
+        <div class="row"><div class="rank top">01</div><div class="av"></div><div class="who">HexRunner<small>@hex.tx · jp</small></div><div class="score">3:42.118<small class="dn">−0.402</small></div></div>
+        <div class="row"><div class="rank top">02</div><div class="av"></div><div class="who">Static.M<small>@static_m · us-w</small></div><div class="score">3:44.802<small class="dn">−0.118</small></div></div>
+        <div class="row"><div class="rank top">03</div><div class="av"></div><div class="who">Halo.K<small>@halo.k · de</small></div><div class="score">3:46.211<small class="up">+0.094</small></div></div>
+        <div class="row"><div class="rank">04</div><div class="av"></div><div class="who">Cinder<small>@cinder_fm · br</small></div><div class="score">3:48.004<small>—</small></div></div>
+        <div class="row"><div class="rank">05</div><div class="av"></div><div class="who">Nova-12<small>@nv12 · au</small></div><div class="score">3:49.502<small class="up">+0.221</small></div></div>
+        <div class="row you"><div class="rank">218</div><div class="av"></div><div class="who">You<small>@your.handle · us-e</small></div><div class="score">4:14.018<small class="dn">↓ −12 spots</small></div></div>
+      </article>
+
+      <article class="lb">
+        <div class="h"><h3>Trail reputation</h3><small>top 6 · all-time</small></div>
+        <div class="row"><div class="rank top">01</div><div class="av"></div><div class="who">TrailWalker.0<small>anonymous · ?</small></div><div class="score">98,402 rep<small>FOUNDER</small></div></div>
+        <div class="row"><div class="rank top">02</div><div class="av"></div><div class="who">Mira H.<small>@mhale · jp</small></div><div class="score">82,118 rep<small>PARTNER</small></div></div>
+        <div class="row"><div class="rank top">03</div><div class="av"></div><div class="who">Dust<small>@dust · is</small></div><div class="score">74,809 rep<small>STUDIO</small></div></div>
+        <div class="row"><div class="rank">04</div><div class="av"></div><div class="who">Kira V.<small>@k.voss · de</small></div><div class="score">68,201 rep<small>STUDIO</small></div></div>
+        <div class="row"><div class="rank">05</div><div class="av"></div><div class="who">Beat.R<small>@beat.r · br</small></div><div class="score">52,118 rep<small>—</small></div></div>
+        <div class="row you"><div class="rank">412</div><div class="av"></div><div class="who">You<small>@your.handle · us-e</small></div><div class="score">2,408 rep<small class="up">↑ +14 / week</small></div></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CREATOR CTA -->
+  <section class="creator-cta">
+    <div class="left">
+      <span class="eyebrow">// partner program · open applications</span>
+      <h2>Got a signal? Become a <span class="accent">creator</span>.</h2>
+      <p>Sub-frequency partners get early builds, monthly drops, a custom decal slot, and a cut of cosmetics. Submit a 60-second reel; we read every one within two weeks.</p>
+    </div>
+    <div class="right">
+      <a class="btn primary lg" href="#">Apply →</a>
+      <a class="btn cyan sm" href="#">Program details <span class="glyph">→</span></a>
+      <span class="next">next review window: <b>may 28</b></span>
+    </div>
+  </section>
+
+  <!-- BIG CTA -->
+  <section class="section" id="play">
+    <div class="bigcta">
+      <div>
+        <span class="eyebrow">// stay loud · stay on the wire</span>
+        <h2 style="margin-top:18px">Get on<br>the <span class="accent">wire</span>.</h2>
+      </div>
+      <div class="meta">
+        <span class="sub">/ free · browser build</span>
+        <a class="btn primary lg" href="#"><span class="glyph">▶</span> Play Vaportrails now</a>
+        <span class="sub" style="opacity:.6">no install · ~80mb</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <div class="brand-block">
+      <span class="brand"><i></i>Vaportrails</span>
+      <p>Neon drift. Underground network. 2099. A small studio above a soba shop in Neon East.</p>
+      <div class="socials"><span>X</span><span>YT</span><span>DC</span><span>TW</span><span>IG</span></div>
+    </div>
+    <div class="col"><h4>Game</h4><ul><li><a href="Home.html">Play</a></li><li><a href="#">Features</a></li><li><a href="#">System reqs</a></li><li><a href="#">Roadmap</a></li></ul></div>
+    <div class="col"><h4>World</h4><ul><li><a href="Lore.html">Lore</a></li><li><a href="Lore.html">Characters</a></li><li><a href="#">Map</a></li><li><a href="#">Soundtrack</a></li></ul></div>
+    <div class="col"><h4>Studio</h4><ul><li><a href="Lore.html">About</a></li><li><a href="News.html">News</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div class="bottom">
+      <span>© 2099 VAPORTRAILS / All glitches reserved</span>
+      <span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">EULA</a></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const nav = document.getElementById('nav');
+    function update(){
+      if(window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+</script>
+</body>
+</html>

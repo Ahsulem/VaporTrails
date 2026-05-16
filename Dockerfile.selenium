@@ -25,4 +25,4 @@ RUN pip install -r requirements.txt
 
 COPY selenium_tests/ .
 
-CMD ["python", "-m", "pytest", "test_vaportrails.py", "-v", "--tb=short"]
+CMD ["python", "-m", "pytest", ".", "-v", "--tb=short"]

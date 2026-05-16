@@ -37,7 +37,7 @@ export default async function ThreadDetailPage({
     .order('created_at', { ascending: true })
 
   // ── 4. Batch-fetch commenter profiles in one round-trip ─────────────────
-  const commenterIds = [...new Set(comments?.map((c) => c.user_id) ?? [])]
+  const commenterIds = Array.from(new Set(comments?.map((c) => c.user_id) ?? []))
 
   const { data: commenterProfiles } = await supabase
     .from('profiles')

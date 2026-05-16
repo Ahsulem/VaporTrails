@@ -27,7 +27,7 @@ export default async function ForumPage() {
   }
 
   // Fetch usernames for every unique user_id in one round-trip
-  const uniqueUserIds = [...new Set(threads?.map((t) => t.user_id) ?? [])]
+  const uniqueUserIds = Array.from(new Set(threads?.map((t) => t.user_id) ?? []))
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, username')

@@ -16,5 +16,5 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth?error=callback_failed`)
   }
 
-  return NextResponse.redirect(`${origin}/play`)
+  return NextResponse.redirect(`${origin}/`)
 }

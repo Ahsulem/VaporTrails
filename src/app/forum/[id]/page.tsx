@@ -9,7 +9,7 @@ export default async function ThreadDetailPage({
 }: {
   params: { id: string }
 }) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // ── 1. Fetch the thread ─────────────────────────────────────────────────
   const { data: thread } = await supabase

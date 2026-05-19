@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import PlayWelcome from './PlayWelcome'
 
 export default async function PlayPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) redirect('/auth')

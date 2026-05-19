@@ -52,7 +52,7 @@ function fmtViews(n: number | null | undefined): string {
 }
 
 export default async function Community() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const [
     { data: pinnedRaw },

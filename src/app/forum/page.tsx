@@ -3,7 +3,7 @@ import Link from 'next/link'
 import './forum.css'
 
 export default async function ForumPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // Fetch all threads ordered by newest first
   const { data: threads } = await supabase

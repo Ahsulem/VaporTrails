@@ -43,6 +43,9 @@ export default function NewThreadPage() {
     if (insertError) {
       setError(insertError.message)
     } else {
+      router.refresh()
+      setTitle('')
+      setContent('')
       router.push('/forum')
     }
   }

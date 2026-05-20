@@ -1,0 +1,19 @@
+{
+  "threads": [
+    {
+      "category": "Trail Routes",
+      "title": "Fastest route through District 04",
+      "content": "I found a shortcut near the Spire that cuts 3 seconds off the lap time."
+    },
+    {
+      "category": "Garage Builds",
+      "title": "Budget chassis build guide",
+      "content": "You dont need a Strider kit to be competitive. Here is my full budget setup."
+    },
+    {
+      "category": "Feedback",
+      "title": "Vapor flicker still happening at 144hz",
+      "content": "Even after 0.7.3 the trail still clips occasionally. Steps to reproduce inside."
+    }
+  ]
+}

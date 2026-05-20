@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { createThreadAction } from './actions'
 import '../forum.css'
 
 export default function NewThreadPage() {
@@ -33,20 +34,14 @@ export default function NewThreadPage() {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const { error: insertError } = await supabase
-      .from('threads')
-      .insert({ title, content, user_id: userId })
-
-    setLoading(false)
-
-    if (insertError) {
-      setError(insertError.message)
+    const res = await createThreadAction(title, content, userId)
+    
+    if (res?.error) {
+      setError(res.error)
+      setLoading(false)
     } else {
-      router.refresh()
       setTitle('')
       setContent('')
-      router.push('/forum')
     }
   }
 

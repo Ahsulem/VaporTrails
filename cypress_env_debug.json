@@ -1,0 +1,11 @@
+{
+  "env": {
+    "SUPABASE_URL": "https://fhgqgsbaicnhaydqvbbo.supabase.co",
+    "SUPABASE_KEY": "sb_publishable_aReRFKz6iCNoHdgXAk72xQ_ErhOltRa",
+    "TEST_EMAIL": "sachaboey81@gmail.com",
+    "TEST_PASSWORD": "testuser123",
+    "INVALID_EMAIL": "wrong@email.com",
+    "INVALID_PASSWORD": "wrongpass"
+  },
+  "baseUrl": "https://vapor-trails.vercel.app"
+}

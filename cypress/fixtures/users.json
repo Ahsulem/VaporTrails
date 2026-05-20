@@ -1,0 +1,11 @@
+{
+  "validUsers": [
+    { "email": "testuser@vaportrails.com", "password": "TestPass123!", "expectedRedirect": "/" },
+    { "email": "rider2@vaportrails.com", "password": "RiderPass456!", "expectedRedirect": "/" }
+  ],
+  "invalidUsers": [
+    { "email": "wrong@email.com", "password": "wrongpass", "expectedError": "Invalid login credentials" },
+    { "email": "testuser@vaportrails.com", "password": "wrongpass", "expectedError": "Invalid login credentials" },
+    { "email": "", "password": "", "expectedError": "required" }
+  ]
+}

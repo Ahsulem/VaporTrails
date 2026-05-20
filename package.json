@@ -7,7 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:headed": "cypress run --headed",
+    "cy:run:nav": "cypress run --spec cypress/e2e/01_navigation.cy.js",
+    "cy:run:auth": "cypress run --spec cypress/e2e/02_auth.cy.js",
+    "cy:run:news": "cypress run --spec cypress/e2e/03_news.cy.js",
+    "cy:run:forum": "cypress run --spec cypress/e2e/04_forum.cy.js",
+    "cy:run:api": "cypress run --spec cypress/e2e/05_api.cy.js",
+    "cy:run:visual": "cypress run --spec cypress/e2e/06_visual.cy.js",
+    "cy:record": "cypress run --record --key YOUR_DASHBOARD_KEY"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -23,6 +33,9 @@
     "@types/react-dom": "^18",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "cypress": "^13.6.0",
+    "cypress-plugin-visual-regression-diff": "npm:@frsource/cypress-plugin-visual-regression-diff@^3.3.0",
+    "xlsx": "^0.18.5"
   }
 }

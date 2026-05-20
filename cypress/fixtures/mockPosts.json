@@ -1,0 +1,29 @@
+[
+  {
+    "id": 101,
+    "title": "Chasing the Vapors: Apex Strider Tuning Guide",
+    "category": "Garage Builds",
+    "content": "To get the maximum drift speed through District 04 corridors, you must re-align your rear thruster modules. We cover the full calibration sequence in this engineering update.",
+    "author": "Drift_Overseer",
+    "created_at": "2026-05-19T12:00:00.000Z",
+    "read_time": "6 min read"
+  },
+  {
+    "id": 102,
+    "title": "VaporTrails Championship Series: Season 2 Launch",
+    "category": "Events",
+    "content": "The High-Table has sanctioned the next league tournament. Prepare your vapor batteries and warm up your capacitors. Qualifiers start next Friday under the Neon Spires.",
+    "author": "System_Admin",
+    "created_at": "2026-05-18T15:30:00.000Z",
+    "read_time": "3 min read"
+  },
+  {
+    "id": 103,
+    "title": "Update 0.7.4 Patch Notes: Thruster Dampening",
+    "category": "Patch notes",
+    "content": "Adjusted overall gravity drop coefficient and resolved the 144hz screen flickering during high-speed vapor boosts. Check out the complete set of structural balancing notes here.",
+    "author": "Lead_Dev",
+    "created_at": "2026-05-17T09:15:00.000Z",
+    "read_time": "4 min read"
+  }
+]
